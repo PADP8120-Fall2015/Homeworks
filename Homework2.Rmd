@@ -1,0 +1,139 @@
+
+---
+title: "PADP8120_Homework2"
+author: "FAll 2015"
+date: "![Creative Commons Attribution License](images/cc-by.png)"
+output:
+  html_document:
+    highlight: pygments
+    theme: cerulean
+widgets     : [mathjax]            # {mathjax, quiz, bootstrap}
+---
+
+
+# Homework 1
+
+Guidelines: Homeworks should be clear and legible, with answers clearly indicated and work shown. Homeworks will be given a minus, check, or check plus owing to completion and correctness. You are welcome to work with others but please submit your own work. Your homework must be produced in an R Markdown (.rmd) file submitted via github. If you are having trouble accomplishing this, please refer to the [guide](http://spia.uga.edu/faculty_pages/tyler.scott/teaching/PADP8120_Fall2015/Homeworks/submitting_homework.shtml). This homework adapts materials from the work of Michael Lynch (http://spia.uga.edu/faculty_pages/mlynch/), Tyler McCormick (http://www.stat.washington.edu/~tylermc/), and Open Intro (https://www.openintro.org/stat/textbook.php)
+
+## Topics
+Topics covered in this homework include:
+
+- Probability
+- Random Variables
+- Inference and hypotheses
+
+## Problems
+
+1. Being hit by a chair is a common occurrence in WWE professional wrestling. The number of people hit upside the head with chairs can vary from program to program. Suppose that the number of chair-bashings per program is Normally distributed, with mean thirty-five (35) bashings and standard deviation of eight (8) bashings. What is the probability that one WWE program will contain less than nineteen (19) bashings or more than forty (40) bashings?
+
+2. A corporation has just received new machinery that must be installed and checked before it becomes operational. The following table shows a manager’s probability assessment for the number of days required before the machinery becomes operational:
+
+| Days  | 5    | 6    | 7    | 8    | 9    | 10 |
+|-------|------|------|------|------|------|----|
+| Prob. | 0.06 | 0.21 | 0.37 | 0.20 | 0.13 | 0.06 |
+
+Let A be the event “It will be more than 6 days before the machinery becomes operational,” and let B be the event “It will be less than 8 days before the machinery becomes available.”
+
+  a. Find the probability of event A.
+  b. Find the robability of event B.
+  c. Find the probability of the complement of event A.
+  d. Find the probability of the intersection of events A and B.
+  e. Find the probability of the union of events A and B.
+
+3. An ultramarathon race official has found that 68% offirst time entrants and 87% ofrepeat racers finish the race. Of all entrants, 64% are repeat racers and the remainders are first time entrants.
+a. What is the probability that a randomly chosen entrant is a repeat racer who will eventually finish the race?
+b. Find the probability that a randomly chosen entrant will eventually finish the race.
+c. What is the probability that a randomly chosen entrant either is a repeat racer or will eventually finish (or both)?
+
+4. A school received a grant to offer two extracurricular clubs, art and chess. Of the students 35% signed up for art club and 40% for chess club. Of those signing up for art club 20% signed up for chess club.
+a. What is the probability that a randomly selected student signed up for both clubs?
+b. What is the probability that a randomly selected sutdent who signed up for chess club also signed up for art club?
+c. What is the probability that a randomly chosen student signed up for at least one of these two clubs? 
+
+5. Records show that 442 students recently entered a Florida public school district. Of those 442, 84 have not received their vaccinations. The district’s physician is scheduled to go from school to school next Tuesday to give shots to those who need them. If we know that about 8% of students are absent on any given day, how many unvaccinated students are likely to miss the doctor visit?
+
+
+6. For questions 1a - 1c, assume a variable is normally distributed with a mean of 180 and a standard deviation of 25. Please show all work (i.e., relevant code - hint: the `pnorm`/`qnorm`/`dnorm` family will be your friend here)
+
+a. What is the probability that a single draw from this distribution, labeled X, will be greater than 210?
+
+b. What is the probability that a single draw from this distribution, labeled Y, will be less than 182?
+
+c. What is the probability that a single draw from this distribution, labeled Z, will be between 160 and 192?
+
+
+7. The random variable x has the discrete probability distribution shown here:
+
+
+| x | -2    | -1    | 0    | 1    | 2    | 
+|-------|------|------|------|------|------|
+| p(x) | 0.15 | 0.15 | 0.35 | 0.25 | 0.10 |
+
+a. Find $P(x<=0)$
+b. Find $P(x>-1)$
+c. Find $P(-1<=x<=1)$
+d. Find $P(x<2)$
+e. Find $P(-1<x<2)$
+
+8. Consider a sequence of independent coin flips, each of which has probability $p$ of being heads. Define a random variable $X$ as the length of the run (either heads or tails) started by the first trial. (For example, $X=3$ if either TTTH or HHHT is observed.) Write the distribution of X and compute $E(X)$.
+
+9. Consider flipping an unequally weighted coin with probability of success $.55$. Say that $X$ is the random variable associated with this coin and that $X=1$ if heads (success), 0 otherwise. Simulate 20 coin flips and store them as a variable called “cflip.” In R, do this with `cflip=rbinom(20,1,.55)`. Use `?rbinom` to make sure you understand what each part of the command stands for.
+
+a. Take 20 samples with replacement from cflip and compute the mean of the sample. In R: `cflipsamp=sample(cflip,20,replace=T)`
+
+b. Repeat step B (but not step A) 500 times, storing the mean of the sample each time. You could do this using a “for” loop to repeat the same step many times. An example of code for a loop is below. However, try to find a non-loop way of accomplishing the same thing (e.g., the `replicate` function). 
+`resamp.mean=rep(NA,500) for(i in 1:500){ resamp.mean[i]<-mean(sample(cflip,20,replace=T))}`. 
+
+c. Plot a histogram of the re-sampled means. Does it look like what we know from normal theory that the sampling distribution of the mean should look like in this case?
+
+d. Experiment with increasing/decreasing the number of original samples (draws within one "sample") and the number of re-samples (number of times you repeat the sampling process). Pay attention to the impact changing either has on the resulting distribution of sample means, and provide some form of visual demonstration (table and/or figure) to show how sample size changes your results. 
+
+10. Consider a population of donuts with with an average survival time until becomming stale of $\mu = 3$ days and a standard deviation of failure times $\sigma = .25$ days (exponential distribution). If you take a sample of 24 donuts, what are the chances the mean failure time of your sample will be:
+
+(a) Greater than 3 days? 
+
+(b) Less than 1.5 days?
+
+(c) Between 2.25 and 3.75 days?
+
+11. (also problem 4.17/4.18 in Open Intro 3) Identify hypotheses, For each item, write the null and alternative hypotheses in words and then symbols for each of the following situations.
+
+a. New York is known as \the city that never sleeps". A random sample of 25 New Yorkers wereasked how much sleep they get per night. Do these data provide convincing evidence thatNew Yorkers on average sleep less than 8 hours a night?
+
+b. Employers at a firm are worried about the effect of March Madness, a basketball championship held each spring in the US, on employee productivity. They estimate that on a regular businessday employees spend on average 15 minutes of company time checking personal email, making personal phone calls, etc. They also collect data on how much company time employees spend on such non-business activities during March Madness. They want to determine if these data provide convincing evidence that employee productivity decreases during March Madness.
+
+c. Since 2008, chain restaurants in California have been required to display calorie counts ofeach menu item. Prior to menus displaying calorie counts, the average calorie intake of dinersat a restaurant was 1100 calories. After calorie counts started to be displayed on menus,a nutritionist collected data on the number of calories consumed at this restaurant from arandom sample of diners. Do these data provide convincing evidence of a difference in theaverage calorie intake of a diners at this restaurant?
+
+d. Based on the performance of those who took the GRE exam between July 1, 2004 and June 30, 2007, the average Verbal Reasoning score was calculated to be 462. In 2011 the averageverbal score was slightly higher. Do these data provide convincing evidence that the average GRE Verbal Reasoning score has changed since 2004?
+
+12. (also 4.30 in Open Intro 3) A food safety inspector is called upon to investigate a restau-rant with a few customer reports of poor sanitation practices. The food safety inspector uses ahypothesis testing framework to evaluate whether regulations are not being met. If he decides therestaurant is in gross violation, its license to serve food will be revoked.
+
+a. Write the hypotheses in words.
+b. What is a Type 1 Error in this context?
+c. What is a Type 2 Error in this context?
+d. Which error is more problematic for the restaurant owner? Why?
+e. Which error is more problematic for the diners? Why?'
+
+
+### Report your process
+
+You're encouraged to reflect on what was hard/easy, problems you solved, helpful tutorials you read, etc. Give credit to your sources, whether it's a blog post, a fellow student, an online tutorial, etc.
+
+
+### Rubric
+
+
+Minus: Didn't tackle at least 3 tasks. Or didn't make companion graphs. Didn't interpret anything but left it all to the "reader". Or more than one technical problem that is relatively easy to fix. It's hard to find the report in our repo.
+
+Check: Completed, but not fully accurate and/or readable. Requires a bit of detective work on my part to see what you did
+
+Check plus: Hits all the elements. No obvious mistakes. Pleasant to read. No heroic detective work required. Solid.
+
+
+#### The command below is helpful for debugging, please don't change it
+
+```{r echo=FALSE}
+sessionInfo()
+```
+
+

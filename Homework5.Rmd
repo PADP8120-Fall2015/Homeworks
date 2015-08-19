@@ -1,0 +1,102 @@
+
+---
+title: "PADP8120_Homework5"
+author: "Fall 2015"
+date: "![Creative Commons Attribution License](images/cc-by.png)"
+output:
+  html_document:
+    highlight: pygments
+    theme: cerulean
+widgets     : [mathjax]            # {mathjax, quiz, bootstrap}
+---
+
+
+# Homework 5
+
+Guidelines: Homeworks should be clear and legible, with answers clearly indicated and work shown. Homeworks will be given a minus, check, or check plus owing to completion and correctness. You are welcome to work with others but please submit your own work. Your homework must be produced in an R Markdown (.rmd) file submitted via github. If you are having trouble accomplishing this, please refer to the [guide](http://spia.uga.edu/faculty_pages/tyler.scott/teaching/PADP8120_Fall2015/Homeworks/submitting_homework.shtml). 
+
+
+This homework adapts materials from the work of Michael Lynch (http://spia.uga.edu/faculty_pages/mlynch/) and Matthew Salganik (http://www.princeton.edu/~mjs3/)
+
+## Topics
+
+Topics covered in this homework include:
+
+- Matrix regression 
+- Interactions and categorical variables
+- Transformations
+
+## Problems
+
+### Problem 1. 
+
+Just as you did for Homework 4, write a function that emulates the `lm` function in R for a simple (bivariate) regression. *However, this time your function needs to make use of the matrix regression approach we learned in Week 12.* Like the `lm` function, your function should be able to estimate and report to the screen $\beta_k$ coefficients, standard errors for these coefficients, and corresponding t-values and p-values. It should also report the residual standard error and $R^2$. Be sure to show your code. Compare your results to the results of the `lm` function on some data of your choosing to verify that things are working correctly. 
+
+### Problem 2.
+
+#### Occupational prestige 
+
+Let's try to understand the relationship between typical education, income, job type, and occupation prestigue using the data from Duncan.  You can read the documentation [here](http://socserv.socsci.mcmaster.ca/jfox/Books/Applied-Regression-2E/datasets/Duncan.pdf)
+
+Here's some code to read in and clean the data.  And for the purposes of this assignment we are going to exclude professionals.  In other words, we are only concerned about white collar and blue collar occupations.  Again, notice that the unit here is occupations.
+
+```{r message=FALSE,warnings=FALSE}
+library(dplyr)
+occup <- read.table("input/Duncan.txt", header=TRUE)
+occup$state <- rownames(occup)
+rownames(occup) <- NULL
+occup <- filter(occup, type %in% c("wc", "bc"))
+head(occup)
+```
+
+(@) Run a regression model to predict the prestige of an occupation based on the level of education of people in that occupation (measured by the percentage of people in the field who have graduated from high school in 1950).
+
+(@) Make a plot showing the data and the model that you fit.
+
+(@) Now run a regression model to predict the prestige of an occupation based on the level of education of people in that occupation (measured by the percentage of people in the field who have graduated from high school in 1950) and the occupation type (blue collar/white collar).
+
+(@) Make a plot showing the data and the model that you fit.
+
+(@) Now run a regression model to predict occupational prestige based on the level of education and occupation type where the relationship between education and occupational prestige is allowed to vary by occupation type.
+
+(@) Calculate predicted levels of prestige for white collar and blue collar jobs at various levels of income and report these predicted levels in a graph (no table needed). What have you learned about prestige thanks to the interactive variable?
+
+(@) How would you summarize the conclusions from three models above?
+
+(@) Now run a the following regression model: `lm(prestige ∼ income + education + income ∗ education)` and substantively describe the effects of the independent variables on the dependent variable. In other words, describe the relationships implied by the interactive terms. Does this interaction make sense to you? Why or why not? No table needed.
+
+(@) Use calculus to identify the predicted impact of a one unit change in income on occupational prestige. Assess whether this impact is statistically distinct from zero. Remember that the variance for an estimated marginal effect $ \frac{\partial \hat{y}}{\partial x} = \hat{\beta}_x + \hat{\beta}_{xz}*z$ where x and z are interacted independent variables, can be calculated by:
+
+$$ V(\frac{\partial \hat{y}}{\partial x} = V(\hat{\beta}_x) + z^2 V(\hat{\beta}_{xz} + 2z * Cov(\hat{\beta}_x,\hat{\beta}_{xz}) $$
+
+￼Because the marginal effect of x depends on values of z, you will need to assess whether the marginal effect is significant across a range of values of z.
+
+
+### Report your process
+
+You're encouraged to reflect on what was hard/easy, problems you solved, helpful tutorials you read, etc. Give credit to your sources, whether it's a blog post, a fellow student, an online tutorial, etc.
+
+### Rubric
+
+Minus: Didn't tackle at least 3 tasks. Or didn't make companion graphs. Didn't interpret anything but left it all to the "reader". Or more than one technical problem that is relatively easy to fix. It's hard to find the report in our repo.
+
+Check: Completed, but not fully accurate and/or readable. Requires a bit of detective work on my part to see what you did
+
+Check plus: Hits all the elements. No obvious mistakes. Pleasant to read. No heroic detective work required. Solid.
+
+
+
+#### The command below is helpful for debugging, please don't change it
+
+```{r echo=FALSE}
+sessionInfo()
+```
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,138 @@
+
+---
+title: "PADP8120_Homework3"
+author: "Fall 2015"
+date: "![Creative Commons Attribution License](images/cc-by.png)"
+output:
+  html_document:
+    highlight: pygments
+    theme: cerulean
+widgets     : [mathjax]            # {mathjax, quiz, bootstrap}
+---
+
+
+# Homework 3
+
+Guidelines: Homeworks should be clear and legible, with answers clearly indicated and work shown. Homeworks will be given a minus, check, or check plus owing to completion and correctness. You are welcome to work with others but please submit your own work. Your homework must be produced in an R Markdown (.rmd) file submitted via github. If you are having trouble accomplishing this, please refer to the [guide](http://spia.uga.edu/faculty_pages/tyler.scott/teaching/PADP8120_Fall2015/Homeworks/submitting_homework.shtml). 
+
+
+This homework adapts materials from the work of Jamie Monogan (http://spia.uga.edu/faculty_pages/monogan/), Michael Lynch (http://spia.uga.edu/faculty_pages/mlynch/), and Open Intro (https://www.openintro.org/stat/textbook.php)
+
+## Topics
+
+Topics covered in this homework include:
+
+- Confidence intervals and p-values
+- T-tests
+- ANOVA and Chi-Square
+
+## Problems
+
+For problems 1-4, Load the `foreign` library and download Alvarez et al.’s (2013) data in Stata format, which are available at: `http://j.mp/alpl2013`. These data are from a field experiment in Salta, Argentina in which some voters cast ballots through e-voting, and others voted in the traditional setting. The variables are: an indictor for whether the voter used e-voting or traditional voting (`EV`), age group
+(`age_group`), education (`educ`), white collar worker (`white_collar`), not a full time
+worker (`not_full_time`), male (`male`), a count variable for number of six possible
+technological devices used (`tech`), an ordinal scale for political knowledge
+(`pol_info`), a character vector naming the polling place (`polling_place`), whether the
+respondent thinks poll workers are qualified (`capable_auth`), whether the voter evaluated
+the voting experience positively (`eval_voting`), whether the voter evaluated the
+speed of voting as quick (`speed`), whether the voter is sure his or her vote is being
+counted (`sure_counted`), whether the voter thought voting was easy (`easy_voting`),
+whether the voter is confident in ballot secrecy (`conf_secret`), whether the voter
+thinks Salta’s elections are clean (`how_clean`), whether the voter thinks e-voting
+should replace traditional voting (`agree_evoting`), and whether the voter prefers selecting
+candidates from different parties electronically (`eselect_cand`).
+
+1. Consider the number of technological devices. Test the hypothesis that the average
+Salta voter has used more than three of these six devices. (Formally: $H_0: \mu = 3; H_A: \mu > 3$)
+
+***
+
+2. Conduct two independent sample difference of means tests:
+a. Is there any difference between men and women in how many technological
+devices they have used?
+b. Is there any difference in how positively voters view the voting experience
+(eval voting) based on whether they used e-voting or traditional voting (EV)?
+
+*** 
+3. Construct two cross-tabulations:
+
+a. Construct a cross-tabulation where the dependent variable is how positively
+voters view the voting experience (eval voting) and the independent variable
+is whether they used e-voting or traditional voting (EV). Does the distribution
+of voting evaluation depend on whether the voter used e-voting?
+b. Construct a cross-tabulation where the dependent variable is how positively
+voters view the voting experience (eval voting) and the independent variable
+is the ordinal scale of political knowledge (pol info). Does the distribution of
+voting evaluation change with the voter’s level of political knowledge?
+
+***
+
+4. Consider the correlation between level of education (`educ`) and political knowledge
+(`pol info`):
+a. Using the `cor()` function, compute Pearson’s `r` between these two variables.
+b. Many argue that, with two ordinal variables, a more appropriate correlation
+measure is Spearman’s $\rho$, which is a rank correlation. Compute $\rho$ (again using the `cor()` function - consult `?cor` if you're stuck) and contrast the results from $r$.
+
+*** 
+
+5. You are working for Professor Hood as a research assistant this semester. He is worried he may have miscalculated the $\chi^2$ statistic that appears on Table 2 of his “Packin’ in the Hood?: Examining Assumptions of Concealed-Handgun Research” article (www.jstor.org/stable/42863973). For Table 2 do the following:
+a. Calculate the expected frequency ($f_e$) for each cell in the table.
+b. Calculate the $chi^2$ and see if you are able to duplicate the results. 
+
+***
+
+6. You are interested in the impact that Hurricane Katrina (and the government's response to Hurricane Katrina) had on President Bush's approval rating. In a Aug. 24, 2005 Gallup poll, 55% of the 814 people surveyed answered that they approved of George W. Bush's handling of his job as president. In a Sept. 14, 2005 Gallup poll, 48% of the 1032 people surveyed answered that they approved of George W. Bush?s handling of his job as president.
+a. At a 99% significance level, did the proportion of Americans that approve of Bush's job as president change after Katrina?
+b. Construct a 95% confidence interval to test whether the proportion changed. Interpret the confidence interval.
+
+***
+
+7. (also Open Intro 5.11) The School for Kids Who Are Good At Music and Want To Learn To Do Other Stuff Good To claims that its students take at least 5 years of piano lessons on average. We have a random sample of 20 children from the city, with a mean of 4.6 years of piano lessons and a standard deviation of 2.2 years.
+a. Evaluate SFKWAGAMAWTLTDOSGT's claim using a hypothesis test.
+b. Construct a 95% confidence interval for the number of years students in this city take piano
+lessons, and interpet it in context of the data.
+c. Do your results from the hypothesis test and the confidence interval agree? Explain your
+reasoning.
+
+***
+8. (also Open Intro 5.19) Let’s consider how temperatures have changed in the US from 1968 to 2008.
+The daily high temperature reading on January 1 was collected in 1968 and 2008 for 51 randomly
+selected locations in the continental US. Then the difference between the two readings (temperature
+in 2008 - temperature in 1968) was calculated for each of the 51 different locations. The average
+of these 51 values was 1.1 degrees with a standard deviation of 4.9 degrees. We are interested in
+determining whether these data provide strong evidence of temperature warming in the continental US.
+
+(a) Write hypotheses for this research in symbols and in words.
+(b) Check the conditions required to complete this test.
+(c) Calculate the test statistic and find the p-value.
+(d) What do you conclude? Interpret your conclusion in context.
+
+***
+9. Go to Sean Lahman's baseball statistics database and download the 2014 version .csv file (http://seanlahman.com/files/database/lahman-csv_2015-01-24.zip). Read in the file of batting statistics `Batting.csv` and select **only** players-seasons between 2005 and 2009 (try `yearID %in% c(2005:2009)` as your filtering mechanism) and **only** players who have at least 200 at-bats (`AB>=200`).
+
+(a) Conduct an ANOVA to see whether there is a significant difference in average number of homeruns (`HR`) hit by players in each of these years.
+
+(b) Using the techniques we employed in lab, conduct a series of pairwise comparisons to identify any significant differences between individual pairs of years. 
+
+
+### Report your process
+
+You're encouraged to reflect on what was hard/easy, problems you solved, helpful tutorials you read, etc. Give credit to your sources, whether it's a blog post, a fellow student, an online tutorial, etc.
+
+
+### Rubric
+
+Minus: Didn't tackle at least 3 tasks. Or didn't make companion graphs. Didn't interpret anything but left it all to the "reader". Or more than one technical problem that is relatively easy to fix. It's hard to find the report in our repo.
+
+Check: Completed, but not fully accurate and/or readable. Requires a bit of detective work on my part to see what you did
+
+Check plus: Hits all the elements. No obvious mistakes. Pleasant to read. No heroic detective work required. Solid.
+
+
+#### The command below is helpful for debugging, please don't change it
+
+```{r echo=FALSE}
+sessionInfo()
+```
+
+

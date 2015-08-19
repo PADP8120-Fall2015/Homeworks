@@ -1,0 +1,133 @@
+
+---
+title: "PADP8120_Homework4"
+author: "Fall 2015"
+date: "![Creative Commons Attribution License](images/cc-by.png)"
+output:
+  html_document:
+    highlight: pygments
+    theme: cerulean
+widgets     : [mathjax]            # {mathjax, quiz, bootstrap}
+---
+
+
+# Homework 4
+
+Guidelines: Homeworks should be clear and legible, with answers clearly indicated and work shown. Homeworks will be given a minus, check, or check plus owing to completion and correctness. You are welcome to work with others but please submit your own work. Your homework must be produced in an R Markdown (.rmd) file submitted via github. If you are having trouble accomplishing this, please refer to the [guide](http://spia.uga.edu/faculty_pages/tyler.scott/teaching/PADP8120_Fall2015/Homeworks/submitting_homework.shtml). 
+
+
+This homework adapts materials from the work of Michael Lynch (http://spia.uga.edu/faculty_pages/mlynch/) and Matthew Salganik (http://www.princeton.edu/~mjs3/)
+
+## Topics
+
+Topics covered in this homework include:
+
+- Bivariate and multivariate regression
+- Regression diagnostics
+
+## Problems
+
+### Problem 1. 
+
+Write a function that emulates the `lm` function in R for a simple (bivariate) regression. Like the `lm` function, your function should be able to estimate and report to the screen `B_k` coefficients, standard errors for these coefficients, and corresponding t-values and p-values. It should also report the residual standard error and $R^2$. Be sure to show your code. Compare your results to the results of the `lm` function on some data of your choosing to verify that things are working correctly. 
+
+### Problem 2. 
+
+Imagine that you've been urged by the teachers' union to show that higher teacher pay leads to better education outcomes.  Of course, you don't do advocacy research --- you are a seeker of truth --- but you decide to investigate this questions scientifically using data about SAT scores and other educational indicators at the state level.  For now we can pretend that this is the only available data (it comes from John Fox's website). [Read the data documentation](http://socserv.socsci.mcmaster.ca/jfox/Books/Applied-Regression-2E/datasets/States.pdf) and use the code below to load it
+
+```{r echo=FALSE,message=FALSE,warnings=FALSE}
+library(dplyr)
+setwd("/Users/TScott/Google Drive/Webpage/teaching/PADP8120_Fall2015/Homeworks")
+educ <- read.table("input/States.txt", header=TRUE)
+# now clean up a bit
+educ <- educ %>% rename(sat.verbal = satVerbal, sat.math = satMath, percent.taking = percentTaking, percent.no.hs = percentNoHS, teacher.pay = teacherPay) 
+# not good to have state as a rowname
+educ$state <- rownames(educ)
+rownames(educ) <- NULL
+educ <- tbl_df(educ)
+```
+
+(@) Make a scatter plot showing the relationship between average teacher pay and average sat score at the state level.  To do this you might have to create a new variable.  And, overlay a regression line on the plot.
+
+(@) Fit a simple regression model to predict total SAT score based on teacher pay.
+
+(@) Check whether the conditional mean of Y|X is a linear function of X.
+
+(@) Check whether the variance of Y|X is the same for any X.
+
+(@) Check whether the errors (and thus the Y|X) are independent of one another).
+
+(@) Check whether the errors are normally distributed with mean zero.
+
+(@) Identify any outliers and quantify their influence and leverage. 
+
+(@) Explain the substantive conclusion that you would draw from the scatter plot and regression analysis. Be sure to interpret the coefficient in a complete sentence. 
+
+
+### Problem 3.
+
+You don't necessarily believe these results, and think there might be more to the story. Thus, you decide to carry on to a multiple regression analysis using more variables.
+
+(@) Using a figure or table, examine the pairwise correlations amongst potential model variables (go ahead and exclude the categorical indicators `state` and `region`. Comment on these results and how they will affect your model fitting. 
+
+(@) Identify the optimal model(s) using all possible subsets and AIC/BIC.
+
+(@) Identify the optimal model(s) using backward elimination and AIC/BIC.
+
+(@) Identify the optimal model(s) using forward selection and AIC/BIC.
+
+(@) Do the methods agree on the optimal model?  If not, why not?
+
+(@) Assess whether your model is doing a good job of modeling the response (hint: think $Y$ vs. $\hat{Y}$  plot).
+
+(@) Assess the relationship between each each predictor and the response (hint: marginal model plots). Is your model well-specified?
+
+(@) Assess how much a given predictor $x_i$ can explain the response after the other predictors have been taken into account.
+
+(@) Recommend a final model and provide your reasoning.
+
+(@) Provide an interpretation (using sentences as you might in an academic journal) of your coefficient results.
+
+
+### Problem 4.
+
+Examine Angell’s data on the moral integration of U.S. cities (Angells is a data file in the car library). 
+
+```{r message=FALSE,warnings=FALSE}
+library(car)
+data("Angell")
+```
+
+(@) Regress moral integration on heterogeneity and geographic mobility for the cities in dataset (multiple regression). 
+
+(@) Report the finding of the results. Be sure to use a table to report $\beta_0$, $\beta_1$, and $\beta_2$ and statistics that allow for significance tests to be performed on these three coefficients. Write a paragraph to substantively explain the results of the model. 
+
+### Report your process
+
+You're encouraged to reflect on what was hard/easy, problems you solved, helpful tutorials you read, etc. Give credit to your sources, whether it's a blog post, a fellow student, an online tutorial, etc.
+
+### Rubric
+
+Minus: Didn't tackle at least 3 tasks. Or didn't make companion graphs. Didn't interpret anything but left it all to the "reader". Or more than one technical problem that is relatively easy to fix. It's hard to find the report in our repo.
+
+Check: Completed, but not fully accurate and/or readable. Requires a bit of detective work on my part to see what you did
+
+Check plus: Hits all the elements. No obvious mistakes. Pleasant to read. No heroic detective work required. Solid.
+
+
+
+
+#### The command below is helpful for debugging, please don't change it
+
+```{r echo=FALSE}
+sessionInfo()
+```
+
+
+
+
+
+
+
+
+
