@@ -30,7 +30,7 @@ Topics covered in this homework include:
 
 ### Problem 1. 
 
-Just as you did for Homework 4, write a function that emulates the `lm` function in R for a simple (bivariate) regression. *However, this time your function needs to make use of the matrix regression approach we learned in Week 12.* Like the `lm` function, your function should be able to estimate and report to the screen $\beta_k$ coefficients, standard errors for these coefficients, and corresponding t-values and p-values. It should also report the residual standard error and $R^2$. Be sure to show your code. Compare your results to the results of the `lm` function on some data of your choosing to verify that things are working correctly. 
+Just as you did for Homework 4, write a function that emulates the `lm` function in R for a simple (bivariate) regression. *However, this time your function needs to make use of the matrix regression approach we learned in Week 12.* Like the `lm` function, your function should be able to estimate and report to the screen $\beta_k$ coefficients, standard errors for these coefficients, and corresponding t-values and p-values. It should also report the residual standard error. Be sure to show your code. Compare your results to the results of the `lm` function on some data of your choosing to verify that things are working correctly. 
 
 ### Problem 2.
 
@@ -69,8 +69,25 @@ head(occup)
 
 $$ V(\frac{\partial \hat{y}}{\partial x} = V(\hat{\beta}_x) + z^2 V(\hat{\beta}_{xz} + 2z * Cov(\hat{\beta}_x,\hat{\beta}_{xz}) $$
 
-￼Because the marginal effect of x depends on values of z, you will need to assess whether the marginal effect is significant across a range of values of z.
+(@) ￼Because the marginal effect of x depends on values of z, you will need to assess whether the marginal effect is significant across a range of values of z.
 
+### Problem 3.
+
+#### LA Housing Prices
+
+Load the LA housing prices dataset:
+
+```{r message = FALSE,eval=FALSE}
+la.dat = read.csv('Input/LA.csv')
+```
+
+(@) Fit the best model you can to predict housing prices in LA on the basis of theory (i.e., what should matter for house prices?) and model fit (i.e., DO NOT use stepwise regression, but feel free to add/subtract/transform variables as you feel are necessary).
+
+(@) Demonstrate the goodness-of-fit of your model (i.e, show that key assumptions appear to be met and that the model would seem to be a viable basis for inference). 
+
+(@) Interpret your substantive findings.
+
+(@) Discuss any potential shortcomings of this model and key future directions that you might take if you sought to better understand LA housing prices. 
 
 ### Report your process
 

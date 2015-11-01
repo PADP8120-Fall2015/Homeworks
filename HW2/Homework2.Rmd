@@ -11,7 +11,7 @@ widgets     : [mathjax]            # {mathjax, quiz, bootstrap}
 ---
 
 
-# Homework 1
+# Homework 2
 
 Guidelines: Homeworks should be clear and legible, with answers clearly indicated and work shown. Homeworks will be given a minus, check, or check plus owing to completion and correctness. You are welcome to work with others but please submit your own work. Your homework must be produced in an R Markdown (.rmd) file submitted via github. If you are having trouble accomplishing this, please refer to the [guide](http://spia.uga.edu/faculty_pages/tyler.scott/teaching/PADP8120_Fall2015/Homeworks/submitting_homework.shtml). This homework adapts materials from the work of Michael Lynch (http://spia.uga.edu/faculty_pages/mlynch/), Tyler McCormick (http://www.stat.washington.edu/~tylermc/), and Open Intro (https://www.openintro.org/stat/textbook.php)
 
@@ -30,7 +30,7 @@ Topics covered in this homework include:
 
 | Days  | 5    | 6    | 7    | 8    | 9    | 10 |
 |-------|------|------|------|------|------|----|
-| Prob. | 0.06 | 0.21 | 0.37 | 0.20 | 0.13 | 0.06 |
+| Prob. | 0.06 | 0.21 | 0.37 | 0.20 | 0.13 | 0.03 |
 
 Let A be the event “It will be more than 6 days before the machinery becomes operational,” and let B be the event “It will be less than 8 days before the machinery becomes available.”
 
@@ -88,7 +88,9 @@ c. Plot a histogram of the re-sampled means. Does it look like what we know from
 
 d. Experiment with increasing/decreasing the number of original samples (draws within one "sample") and the number of re-samples (number of times you repeat the sampling process). Pay attention to the impact changing either has on the resulting distribution of sample means, and provide some form of visual demonstration (table and/or figure) to show how sample size changes your results. 
 
-10. Consider a population of donuts with with an average survival time until becomming stale of $\mu = 3$ days and a standard deviation of failure times $\sigma = .25$ days (exponential distribution). If you take a sample of 24 donuts, what are the chances the mean failure time of your sample will be:
+10. Consider a population of donuts with with an average survival time until becoming stale of $\mu = 3$ days and is exponentially distributed (so the mean = sd). If you take a sample of 24 donuts, what are the chances the mean failure time of your sample will be:
+
+PLEASE SKIP THIS PROBLEM
 
 (a) Greater than 3 days? 
 

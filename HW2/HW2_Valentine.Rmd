@@ -1,0 +1,378 @@
+---
+title: "HW2_Valentine"
+author: "Thomas K. Valentine"
+date: "September 23, 2015"
+output: html_document
+---
+
+## Problems
+
+###1. Being hit by a chair is a common occurrence in WWE professional wrestling. The number of people hit upside the head with chairs can vary from program to program. Suppose that the number of chair-bashings per program is Normally distributed, with mean thirty-five (35) bashings and standard deviation of eight (8) bashings. What is the probability that one WWE program will contain less than nineteen (19) bashings or more than forty (40) bashings?
+
+```{r}
+#Probability of less than 19 bashings
+lower.pval <- pnorm(q=19,mean=35,sd=8,lower.tail=TRUE);lower.pval
+
+#Probability of more than 40 bashings
+upper.pval <- pnorm(q=40,mean=35,sd=8,lower.tail=FALSE);upper.pval
+
+#Sum of these two probabilities
+total.pval <- lower.pval + upper.pval; total.pval
+
+#Probability of less than 19 or more than 40 bashings:
+round(total.pval,3)
+```
+
+###2. A corporation has just received new machinery that must be installed and checked before it becomes operational. The following table shows a manager’s probability assessment for the number of days required before the machinery becomes operational:
+
+| Days  | 5    | 6    | 7    | 8    | 9    | 10 |
+|-------|------|------|------|------|------|----|
+| Prob. | 0.06 | 0.21 | 0.37 | 0.20 | 0.13 | 0.03 |
+
+
+### Let A be the event “It will be more than 6 days before the machinery becomes operational,” and let B be the event “It will be less than 8 days before the machinery becomes available.”
+
+####  a. Find the probability of event A.
+
+```{r}
+#Sum of probabilities for Day 7, 8, 9, 10
+event.A <- 0.37 + 0.20 + 0.13 + 0.03; print(event.A)
+```
+
+####  b. Find the probability of event B.
+  
+```{r}
+#Sum of probabilities for Day 5, 6, 7
+event.B <- 0.06 + 0.21 + 0.37; print(event.B)
+```
+
+####  c. Find the probability of the complement of event A.
+  
+```{r}
+#The following formula measures the probability for all events minus event A, or all events that fall outside of event A.
+1 - event.A
+```
+
+####  d. Find the probability of the intersection of events A and B.
+
+This probability is the measure of outcomes where both A and B are true. A was the sum of 7, 8, 9, 10 and B was the sum of 5, 6, 7. The intersection is 7. 
+From the table, we know that means the intersection is .37
+
+####  e. Find the probability of the union of events A and B.
+
+This probability is the measure of any event that would satisify event.A or event.B. Between A and B, all values (5,6,7,8,9,10) are included, so the probability is 100%, or 1.
+
+###3. An ultramarathon race official has found that 68% of first time entrants and 87% of repeat racers finish the race. Of all entrants, 64% are repeat racers and the remainders are first time entrants.
+
+
+#### a. What is the probability that a randomly chosen entrant is a repeat racer who will eventually finish the race?
+```{r}
+#Probability of first time entrant finishing race
+#p(0.68)
+
+#Probability of repeat racers finishing race
+#p(0.87)
+
+#Probability of being both
+round(0.68 * 0.87, 2)
+```
+
+#### b. Find the probability that a randomly chosen entrant will eventually finish the race.
+
+The number of first time runners is the value of all runners minus the 64% of repeat runners, or 36%. Using that number, we can create a formula that combines the proportion of finishers from each category. That formula would be .63 x .87 + .36 x .68. We can complete this function in R, then round.
+
+```{r}
+round(0.64 * 0.87 + 0.36 * 0.68,2)
+```
+
+#### c. What is the probability that a randomly chosen entrant either is a repeat racer or will eventually finish (or both)?
+
+```{r}
+#p(Repeat) + p(Finish) - p(Finish + Repeat)
+sum(0.64 + 0.80 - 0.56)
+```
+
+Probability is .88
+
+###4. A school received a grant to offer two extracurricular clubs, art and chess. Of the students 35% signed up for art club and 40% for chess club. Of those signing up for art club 20% signed up for chess club.
+
+#### a. What is the probability that a randomly selected student signed up for both clubs?
+
+```{r}
+#% of Students signed up for art x % of students signed up for Chess Club
+.35*.20
+```
+
+.07 Students signed up for both.
+
+#### b. What is the probability that a randomly selected student who signed up for chess club also signed up for art club?
+
+```{r}
+#% Signed up for Chess Club
+#40%
+
+#Probability that a randomly selected student signed up for both
+.35*.20
+
+#If we know that 7% probability that signed up for both and we know that 40% of students are signed up for chess club, so probability of chess club member being in art as well
+7/40
+```
+
+#### c. What is the probability that a randomly chosen student signed up for at least one of these two clubs? 
+
+We can work this out logically as well as mathematically. 35% of students signed up for art, 40% signed up for chess. 7% signed up for both. We add and subtract appropriately to get the following formula:
+
+```{r}
+#% signed up for art + % signed up for chess - % signed up for both
+0.35 + 0.40 - 0.07
+```
+
+Probability is .68
+
+###5. Records show that 442 students recently entered a Florida public school district. Of those 442, 84 have not received their vaccinations. The district’s physician is scheduled to go from school to school next Tuesday to give shots to those who need them. If we know that about 8% of students are absent on any given day, how many unvaccinated students are likely to miss the doctor visit?
+
+```{r}
+#The two probabilities in this scenario are unconditional. We solve for the probability of being absent by the # of unvaccinated students.
+0.08 * 84
+```
+
+The result is 6.72 students.
+
+###6. For questions 1a - 1c, assume a variable is normally distributed with a mean of 180 and a standard deviation of 25. Please show all work (i.e., relevant code - hint: the `pnorm`/`qnorm`/`dnorm` family will be your friend here)
+
+#### a. What is the probability that a single draw from this distribution, labeled X, will be greater than 210?
+
+```{r}
+#Formula will be pnorm(greater than value, mean, standard deviation)
+#We are looking for greater than, so we lower tail = false
+pnorm(210,180,25,lower.tail=FALSE)
+```
+
+Probability is .1150697
+
+#### b. What is the probability that a single draw from this distribution, labeled Y, will be less than 182?
+
+```{r}
+#Formula will be pnorm(less than value, mean, standard deviation)
+#We are looking for greater than, so we lower tail = true
+pnorm(182,180,25,lower.tail=TRUE)
+```
+
+#### c. What is the probability that a single draw from this distribution, labeled Z, will be between 160 and 192?
+
+```{r}
+#We use the same type of formulas or above, then subtract them from one and then each other.
+1- pnorm(160,180,25,lower.tail=TRUE) - pnorm(192,180,25,lower.tail=FALSE)
+```
+
+###7. The random variable x has the discrete probability distribution shown here:
+
+
+| x | -2    | -1    | 0    | 1    | 2    | 
+|-------|------|------|------|------|------|
+| p(x) | 0.15 | 0.15 | 0.35 | 0.25 | 0.10 |
+
+#### a. Find $P(x<=0)$
+
+```{r}
+#To calculate the probability that x is less than or equal to 0, we add the probabilities from the table that are associated with all negative and 0 values.
+
+0.15+0.15+0.35
+```
+
+#### b. Find $P(x>-1)$
+
+```{r}
+#To calculate the probability that x is greater than or equal to -1, we add the probabilities from the table that are above -1.
+
+0.35+0.25+0.10
+```
+
+#### c. Find $P(-1<=x<=1)$
+
+```{r}
+#To calculate the probability that x is greater than or equal to -1 AND less than or equal to 1, we add the probabilities above and below those limits that are present in the table above:
+
+0.15 + 0.35 + 0.25
+```
+
+#### d. Find $P(x<2)$
+
+```{r}
+#To calculate the probability that x is less than 2, we take a certain probability (100% or 1) and subtract the probability of 2 from the table above:
+
+1-0.10
+```
+
+#### e. Find $P(-1<x<2)$
+
+```{r}
+#To calculate the probability that x is greater than -1 and less than 2, we add the probability associated with 0 and 1 on the table above:
+
+0.25 + 0.35
+```
+
+
+###9. Consider flipping an unequally weighted coin with probability of success $.55$. Say that $X$ is the random variable associated with this coin and that $X=1$ if heads (success), 0 otherwise. Simulate 20 coin flips and store them as a variable called “cflip.” In R, do this with `cflip=rbinom(20,1,.55)`. Use `?rbinom` to make sure you understand what each part of the command stands for.
+
+```{r}
+cflip=rbinom(20,1,.55)
+```
+
+Note to self: we use rbinom because the coin flip has a binomial distribution
+
+#### a. Take 20 samples with replacement from cflip and compute the mean of the sample. In R: `cflipsamp=sample(cflip,20,replace=T)`
+
+```{r}
+cflipsamp=sample(cflip,20,replace=T)
+```
+
+#### b. Repeat step B (but not step A) 500 times, storing the mean of the sample each time. You could do this using a “for” loop to repeat the same step many times. An example of code for a loop is below. However, try to find a non-loop way of accomplishing the same thing (e.g., the `replicate` function). 
+`resamp.mean=rep(NA,500) for(i in 1:500){ resamp.mean[i]<-mean(sample(cflip,20,replace=T))}`. 
+
+```{r}
+cflip500samp = replicate(500,mean(sample(cflip,20,replace=T)))
+```
+
+#### c. Plot a histogram of the re-sampled means. Does it look like what we know from normal theory that the sampling distribution of the mean should look like in this case?
+
+```{r}
+hist(cflip500samp)
+```
+
+Yes, this is about what we would expect.The true probability is 0.55, and it looks like the distribution is approximately normally distributed around this value. 
+
+#### d. Experiment with increasing/decreasing the number of original samples (draws within one "sample") and the number of re-samples (number of times you repeat the sampling process). Pay attention to the impact changing either has on the resulting distribution of sample means, and provide some form of visual demonstration (table and/or figure) to show how sample size changes your results. 
+Here are four experiments
+
+Experiment 1:
+```{r}
+#Create a histogram of 50 draws, done 50 times (samples)
+hist(replicate(50,mean(sample(cflip,50,replace=T))),main='25 Draws, 25 Times',xlab='')
+```
+
+Experiment 2:
+```{r}
+#Create a histogram of 50 draws, done 500 times (samples)
+hist(replicate(500,mean(sample(cflip,50,replace=T))),main='50 Draws, 500 Times',xlab='')
+```
+
+Experiment 3:
+```{r}
+#Create a histogram of 500 draws, done 50 times (samples)
+hist(replicate(50,mean(sample(cflip,500,replace=T))),main='500 Draws, 50 Times',xlab='')
+```
+
+Experiment 4:
+
+```{r}
+#Create a histogram of 500 draws, done 500 times (samples)
+hist(replicate(500,mean(sample(cflip,500,replace=T))),main='500 Draws, 500 Times',xlab='')
+```
+
+####From these four experiments, we can make the following observations:
+1. Experiment 3 shows a distribution that is not normal. 
+2. Experiment 2 and Experiment 4 produce similar histograms
+3. Experiment 2 produces a wider distribution
+4. Increasing the number of draws alone (as was done in Experiment 3) is therefore not sufficient.
+5. Experiment 4 produces a normal distribution that is best clustered around the mean.
+6. We can see that # of samples makes a more critical change than the # of draws.
+
+###11. (also problem 4.17/4.18 in Open Intro 3) Identify hypotheses, for each item, write the null and alternative hypotheses in words and then symbols for each of the following situations.
+
+#### a. New York is known as \the city that never sleeps". A random sample of 25 New Yorkers were asked how much sleep they get per night. Do these data provide convincing evidence that New Yorkers on average sleep less than 8 hours a night?
+
+**Null Hypothesis:** New Yorkers sleep 8 hours on an average night
+
+**Alternative Hypothesis** New Yorkers sleep less than 8 hours on an average night 
+
+$$H_0: \mu = 8$$
+$$H_A: \mu < 8$$
+
+#### b. Employers at a firm are worried about the effect of March Madness, a basketball championship held each spring in the US, on employee productivity. They estimate that on a regular business day employees spend on average 15 minutes of company time checking personal email, making personal phone calls, etc. They also collect data on how much company time employees spend on such non-business activities during March Madness. They want to determine if these data provide convincing evidence that employee productivity decreases during March Madness.
+
+**Null Hypothesis:** During March Madness, employees spend 15 minutes per day on non-work activities.
+
+**Alternative Hypothesis** During March Madness, employees spend more than 15 minutes per day on non-work activities.
+
+$$H_0: \mu = 15$$
+$$H_A: \mu > 15$$
+
+#### c. Since 2008, chain restaurants in California have been required to display calorie counts of each menu item. Prior to menus displaying calorie counts, the average calorie intake of dinersat a restaurant was 1100 calories. After calorie counts started to be displayed on menus, a nutritionist collected data on the number of calories consumed at this restaurant from a random sample of diners. Do these data provide convincing evidence of a difference in the average calorie intake of a diners at this restaurant?
+
+**Null Hypothesis:** Number of calories consumed by diners after menus with calories were introduced is the same as before
+
+**Alternative Hypothesis** Number of calories consumed by diners after menus with calories were introduced is different than before.
+
+$$H_0: \mu = 1100$$
+$$H_A: \mu != 1100$$
+
+#### d. Based on the performance of those who took the GRE exam between July 1, 2004 and June 30, 2007, the average Verbal Reasoning score was calculated to be 462. In 2011 the average verbal score was slightly higher. Do these data provide convincing evidence that the average GRE Verbal Reasoning score has changed since 2004?
+
+**Null Hypothesis:** Average performance on GRE Verbal Reasoning is the same as 2004.
+
+**Alternative Hypothesis** Average performance on GRE Verbal Reasoning is different than 2004.
+
+$$H_0: \mu = 462$$
+$$H_A: \mu != 462$$
+
+###12. (also 4.30 in Open Intro 3) A food safety inspector is called upon to investigate a restaurant with a few customer reports of poor sanitation practices. The food safety inspector uses a hypothesis testing framework to evaluate whether regulations are not being met. If he decides the restaurant is in gross violation, its license to serve food will be revoked.
+
+#### a. Write the hypotheses in words.
+
+**Null Hypothesis:** Restaurant is meeting sanitation regulations
+
+**Alternative Hypothesis** Restaurant is not meeting sanitation regulations
+
+#### b. What is a Type 1 Error in this context?
+
+If conclude that the restaurant is not meeting sanitation regulations when it actually is.
+
+#### c. What is a Type 2 Error in this context?
+
+If we conclude the resturant is meeting sanitation regulations when it is not actually meeting them.
+
+#### d. Which error is more problematic for the restaurant owner? Why?
+
+**Type 1 Error** The restaurant owner would be more concerned about being shut down when he actually is meeting regulations. This would be Type 1 error.
+
+#### e. Which error is more problematic for the diners? Why?'
+
+**Type 2 Error** For diners (or the regulation board), the more problematic event would be failing to shut down the restaurant if it is not meeting sanitation regulations.
+
+### Report your process
+
+This week's effort was more challenging than last week's, which led to a few days of extra work after my original posting goal of Wednesday. 
+
+####Here is how I approached this week's assignment:
+1. I created a new markdown file
+2. I integrated the Homework Key
+3. I worked backwords, using the ? command to understand each decision step by step. 
+4. Where relevant, I used different numbers (such as in the experiments) or grammar to ensure that my work was original.
+5. I repeated steps 3 and 4 throughout to ensure that I would be able to do this work on my own
+6. In a few places (again such as the experiments) I chose to display work differently. For example, I did not use the par command, which would have displayed all four experiments in a single four-part display. I prefered to see each histogram seperately.
+7. I consulted http://rmarkdown.rstudio.com/ to determine how to format this file according to my preferences. Last week, I used this to learn heading changes. This week, I learned how to create lists and to bold parts of texts.
+
+####Things I want to change in the next homework:
+1. I want to rely on the key to a smaller degree
+2. I feel I will be more confident in my markdown formatting, but would like to learn to use bullets. The suggestions on how to use those on rmarkdown.rstudio.com didn't seem to work and I would like to troubleshoot the problem
+3. One critical mistake I made: I didn't commit at all throughout the process! Failing to do so means that I cannot track my progress, nor would I have been able to revert to an earlier version if I had made a critical mistake.
+
+**All in all, this was a fun and challenging homework assignment. I look forward to the next one!**
+
+
+
+### Rubric
+
+
+Minus: Didn't tackle at least 3 tasks. Didn't interpret anything but left it all to the "reader". Or more than one technical problem that is relatively easy to fix. It's hard to find the report in our repo.
+
+Check: Completed, but not fully accurate and/or readable. Requires a bit of detective work on my part to see what you did
+
+Check plus: Hits all the elements. No obvious mistakes. Pleasant to read. No heroic detective work required. Solid.
+
+#### The command below is helpful for debugging, please don't change it
+
+```{r echo=FALSE}
+sessionInfo()
+```

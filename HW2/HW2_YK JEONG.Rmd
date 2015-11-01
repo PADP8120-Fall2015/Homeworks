@@ -1,0 +1,456 @@
+<br>
+<br>
+<p style="text-align:center"><span style="font-size:22pt">
+**Homework 2**</span></p>
+<p style="text-align:right"><span style="font-size:16pt">
+*Youkyoung JEONG*</span></p>
+<p style="text-align:right"><span style="font-size:16pt">
+*09.23.2015*</span></p>
+<br>
+<span style="font-size:16pt;color:#B70000">
+**Problems**</span>
+<br>
+
+1. Being hit by a chair is a common occurrence in WWE professional wrestling. The number of people hit upside the head with chairs can vary from program to program. Suppose that the number of chair-bashings per program is Normally distributed, with mean thirty-five (35) bashings and standard deviation of eight (8) bashings. What is the probability that one WWE program will contain less than nineteen (19) bashings or more than forty (40) bashings?  
+<br>
+
+<p style="margin-left:40px">The probability can be calculated by aggregating the shaded area in the graph below:</p>
+
+```{r}
+x<-(10:60); y<-dnorm(x,35,8)
+plot(x,y,type="l", main="P(x<19) + P(x>40)", xlab="Bashings", ylab="Probability")
+i<-x<=19; k<-x>=40
+polygon(c(10,x[i],19), c(0,y[i],0), col="pink")
+polygon(c(40,x[k],60), c(0,y[k],0), col="pink")
+```
+
+<p style="margin-left:40px">In other words, if <code>less.than.19</code> refers to $P(x<19)$ and <code>more.than.40</code> refers to $P(x>40)$, the probability can be calculated as below.</p>
+
+```{r}
+less.than.19 <- pnorm(q=19,mean=35,sd=8,lower.tail=TRUE); less.than.19
+more.than.40 <- pnorm(q=40,mean=35,sd=8,lower.tail=FALSE); more.than.40
+total.prob <- less.than.19 + more.than.40; total.prob
+```
+
+<p style="margin-left:40px">Thus, the probability that one WWE program will contain less than 19 bashings or more than 40 bashings is 0.29.</p>
+<br>
+
+
+2. A corporation has just received new machinery that must be installed and checked before it becomes operational. The following table shows a manager’s probability assessment for the number of days required before the machinery becomes operational:
+
+<table>
+<thead>
+<tr class="header">
+<th align="left">Days</th>
+<th align="left">5</th>
+<th align="left">6</th>
+<th align="left">7</th>
+<th align="left">8</th>
+<th align="left">9</th>
+<th align="left">10</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Prob.</td>
+<td align="left">0.06</td>
+<td align="left">0.21</td>
+<td align="left">0.37</td>
+<td align="left">0.20</td>
+<td align="left">0.13</td>
+<td align="left">0.03</td>
+</tr>
+</tbody>
+</table>
+
+Let A be the event “It will be more than 6 days before the machinery becomes operational,” and let B be the event “It will be less than 8 days before the machinery becomes available.”
+<br>
+
+a. Find the probability of event A.
+
+<p style="margin-left:40px"> The probability of event A can be calculated by adding the probabilities for days from 7 to 10.</p>
+
+```{r}
+eventA <- 0.37+0.20+0.13+0.03; eventA
+```
+
+<p style="margin-left:40px"> Thus, the probability of event A is 0.73.</p>
+<br>
+
+b. Find the probability of event B.
+
+<p style="margin-left:40px"> The probability of event A can be calculated by adding the probabilities for days from 5 to 7.</p>
+
+```{r}
+eventB <- 0.06 + 0.21 + 0.37; eventB
+```
+
+<p style="margin-left:40px"> Thus, the probability of event B is 0.64.</p>
+<br>
+
+c. Find the probability of the complement of event A.
+
+<p style="margin-left:40px"> The probability of the complement of event A can be calculated by subtracting the probability of event A from 1.</p>
+
+```{r}
+1 - eventA
+```
+
+<p style="margin-left:40px"> The probability of the complement of event A is 0.27.</p>
+<br>
+
+d. Find the probability of the intersection of events A and B.
+
+<p style="margin-left:40px"> : If $A$ refers to the set of Event A and $B$ refers to the set of Event B,</p>
+ 
+$$A= \{7,8,9,10\},\ B= \{5,6,7\}$$
+$$\therefore A\cap B= \{7\}$$
+$$\therefore P(A\cap B)=P(x=7)=0.37$$
+ 
+<p style="margin-left:40px"> Thus, the probability of the intersection of events A and B equals to 0.37.</p>
+<br>
+
+e. Find the probability of the union of events A and B.
+
+<p style="margin-left:40px"> : If $U$ refers to the universal set of all possible events,</p>
+
+$$A= \{7,8,9,10\},\ B= \{5,6,7\}$$
+$$\therefore A\cup B= \{5,6,7,8,9,10\}=U$$
+$$\therefore P(A\cup B)=P(5\leq x \leq 10)=P(U)=1$$
+<p style="margin-left:40px"> Thus, the probability of the union of events A and B equals to 1.</p>
+<br>
+
+3. An ultramarathon race official has found that 68% of first time entrants and 87% of repeat racers finish the race. Of all entrants, 64% are repeat racers and the remainders are first time entrants.
+<br>
+
+a. What is the probability that a randomly chosen entrant is a repeat racer who will eventually finish the race?
+
+<p style="margin-left:40px"> : The probability that someone is a repeat racer and finishes the race can be calculated by multiplying the probability of each event. If $R$ refers to the event to be a repeat racer and $RF$ refers to the event that the repeat racer finishes the race, the answer can be derived as below:</p>
+
+$$P(R)=0.64,\ P(RF)=0.87$$
+$$P(R)*P(RF) = 0.64*0.87=0.5568$$
+
+
+b. Find the probability that a randomly chosen entrant will eventually finish the race.
+
+<p style="margin-left:40px"> : It can be calculated by summing the probability that a repeat racer finishes the race and the probability that a first timer finishes the race. If $E$ refers to the first time entrants and $EF$ refers to the event that the first time entrant finishes the race, the answer can be derived as below:</p>
+
+$$P(E)=1-P(R),\ P(EF)=0.68$$
+$$P(R)*P(RF)+P(E)*P(EF)$$
+$$=0.64*0.87 + (1-0.64)*0.68$$
+$$=0.8016$$
+
+c. What is the probability that a randomly chosen entrant either is a repeat racer or will eventually finish (or both)?
+
+<p style="margin-left:40px"> : If $F$ refers to the event of finishing the race, the probability that a randomly chosen entrant either is a repeat racer or will eventually finish can be calculated by adding $P(R)$ and $P(F)$. However, this double counts the intersection of $P(R)$ and $P(F)$, and $P(R\cap F)$ should be subtracted. Thus,</p>
+
+$$P(R)+P(F) - P(R\cap F)$$
+$$=P(R)+(P(R)*P(RF)+P(E)*P(EF))-P(R)*P(RF)$$
+$$=P(R)+P(E)*P(EF)$$
+$$=0.64+(1-0.64)*0.68$$
+$$=0.8848$$
+
+<br>
+
+4. A school received a grant to offer two extracurricular clubs, art and chess. Of the students 35% signed up for art club and 40% for chess club. Of those signing up for art club 20% signed up for chess club.
+
+<br>
+
+a. What is the probability that a randomly selected student signed up for both clubs?
+
+<p style="margin-left:40px"> : Since 20% of student who enrolled in the art club also signed up for the chess club, the answer can be derived by multiplying the portion of the art club, $0.35$, and $0.2$.</p>
+
+```{r}
+0.35*0.2
+```
+
+<p style="margin-left:40px"> Thus, 7% of student is signed up for both art club and chess club.</p>
+
+<br>
+
+b. What is the probability that a randomly selected sutdent who signed up for chess club also signed up for art club?
+
+<p style="margin-left:40px"> : The answer can be derived by calculating the conditional probability. In other words, the probability that students signed up for art club given that the students enrolled in the chess club should be calculated as below:</p>
+
+$$P(ART\mid CHESS)=P(ART\cap CHESS)/P(CHESS)$$
+$$=0.07/0.4=0.175$$
+
+<p style="margin-left:40px"> Thus, 0.175 students who signed up for chess club also signed up for art club.</p>
+
+<br>
+
+c. What is the probability that a randomly chosen student signed up for at least one of these two clubs?
+
+<p style="margin-left:40px"> : The probability for the student who signed up for art club OR chess club can be derived by subtracting the intersection of the art club and chess club from the sum of the probability of art club and chess club.</p>
+
+$$P(ART\cup CHESS)=P(ART)+P(CHESS)-P(ART\cap CHESS)$$
+$$=0.35+0.40-0.07=0.68$$
+
+<p style="margin-left:40px"> Thus, 68% of students signed up for either art club or chess club.</p>
+
+<br>
+
+5. Records show that 442 students recently entered a Florida public school district. Of those 442, 84 have not received their vaccinations. The district’s physician is scheduled to go from school to school next Tuesday to give shots to those who need them. If we know that about 8% of students are absent on any given day, how many unvaccinated students are likely to miss the doctor visit?
+
+<p style="margin-left:40px"> : We need to find out the number of students who are likely to absent given that the students has not received their vaccinations. Thus, it can be calculated by multiplying the probability for being absent and the number of student who has not vaccinated yet. </p>
+
+```{r}
+0.08*84
+```
+
+<p style="margin-left:40px"> Thus, about 6.72 students are likely to miss the doctor visit.</p>
+
+<br>
+
+6. For questions 1a - 1c, assume a variable is normally distributed with a mean of 180 and a standard deviation of 25. Please show all work (i.e., relevant code - hint: the <code>pnorm/qnorm/dnorm</code> family will be your friend here)
+<br>
+
+a. What is the probability that a single draw from this distribution, labeled X, will be greater than 210?
+
+<p style="margin-left:40px"> : For the normally distributed variable $X\sim N(180,25^2)$, $P(X>210)$ can be calculated as below.</p>
+
+```{r}
+pnorm(210,mean=180,sd=25,lower.tail = FALSE)
+```
+
+<p style="margin-left:40px"> Thus, $P(X>210)$ equals to 0.1150697.</p>
+
+
+b. What is the probability that a single draw from this distribution, labeled Y, will be less than 182?
+
+<p style="margin-left:40px"> : For the normally distributed variable $Y\sim N(180,25^2)$, $P(Y<182)$ can be calculated as below.</p>
+
+```{r}
+pnorm(182,mean=180,sd=25,lower.tail = TRUE)
+```
+
+<p style="margin-left:40px"> Thus, $P(Y<182)$ equals to 0.5318814.</p>
+
+
+c. What is the probability that a single draw from this distribution, labeled Z, will be between 160 and 192?
+
+<p style="margin-left:40px"> : If $Z$ follows a normal distribution with mean 180 and standard deviation 25, we can find out $P(160<Z<192)$ by subtracting the pink area from the shaded area in the graph below.</p>
+
+```{r}
+q<-(104:256); Z<-dnorm(q,180,25)
+plot(q,Z,type="l", main="P(160<Z<192)")
+r<-q<=160; s<-q<=192
+polygon(c(104,q[r],160), c(0,Z[r],0), col="pink")
+polygon(c(104,q[s],192), c(0,Z[s],0), density = 8)
+```
+
+<p style="margin-left:40px"> It can be calculated by using <code>pnorm</code>.</p>
+
+```{r}
+pnorm(192,mean = 180,sd = 25,lower.tail = TRUE)-pnorm(160,mean = 180,sd = 25,lower.tail = TRUE)
+```
+
+<p style="margin-left:40px"> Thus, $P(160<Z<192)$ equals to 0.4725309.</p>
+
+<br>
+
+7. The random variable x has the discrete probability distribution shown here:
+
+<table>
+<thead>
+<tr class="header">
+<th align="left">x</th>
+<th align="left">-2</th>
+<th align="left">-1</th>
+<th align="left">0</th>
+<th align="left">1</th>
+<th align="left">2</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">p(x)</td>
+<td align="left">0.15</td>
+<td align="left">0.15</td>
+<td align="left">0.35</td>
+<td align="left">0.25</td>
+<td align="left">0.10</td>
+</tr>
+</tbody>
+</table>
+<br>
+
+a. Find $P(x\leq 0)$
+
+$$P(X\leq 0)=P(X=-2)+P(X=-1)+P(X=0)$$
+$$=0.15+0.15+0.35=0.65$$
+$$\therefore P(X\leq 0)=0.65$$
+
+
+b. Find $P(x>−1)$
+
+$$P(X>-1)=P(X=0)+P(X=1)+P(X=2)$$
+$$0.35+0.25+0.10=0.70$$
+$$\therefore P(X>-1)=0.70$$
+
+
+c. Find $P(−1\leq x\leq 1)$
+
+$$P(-1\leq X \leq 1)=P(X=-1)+P(X=0)+P(X=1)$$
+$$0.15+0.35+0.25=0.75$$
+$$\therefore P(-1\leq X \leq 1)=0.75$$
+
+
+d. Find $P(x<2)$
+
+$$P(X<2)=1-P(X=2)$$
+$$=1-0.10=0.90$$
+$$\therefore P(X<2)=0.90$$
+
+e. Find $P(−1<x<2)$
+
+$$P(-1<X<2)=P(X=0)+P(X=1)$$
+$$=0.35+0.25=0.60$$
+$$\therefore P(-1<X<2)=0.60$$
+
+<br>
+
+9. Consider flipping an unequally weighted coin with probability of success $.55$. Say that $X$ is the random variable associated with this coin and that $X=1$ if heads (success), 0 otherwise. Simulate 20 coin flips and store them as a variable called “cflip.” In R, do this with <code>cflip=rbinom(20,1,.55)</code>. Use <code>?rbinom</code> to make sure you understand what each part of the command stands for.
+
+```{r}
+cflip=rbinom(20,1,.55)
+```
+
+a. Take 20 samples with replacement from cflip and compute the mean of the sample. In R: <code>cflipsamp=sample(cflip,20,replace=T)</code>
+
+```{r}
+cflipsamp=sample(cflip,20,replace=T)
+```
+
+b. Repeat step B (but not step A) 500 times, storing the mean of the sample each time. You could do this using a “for” loop to repeat the same step many times. An example of code for a loop is below. However, try to find a non-loop way of accomplishing the same thing (e.g., the <code>replicate</code> function). <code>resamp.mean=rep(NA,500) for(i in 1:500){ resamp.mean[i]<-mean(sample(cflip,20,replace=T))}.</code>
+
+<p style="margin-left:40px"> : <code>replicate</code> can be used to repeat the sampling process instead of making a loop as below.</p>
+
+```{r}
+cflipsamp500 <- replicate(500, mean(sample(cflip,20,replace=TRUE)))
+```
+
+c. Plot a histogram of the re-sampled means. Does it look like what we know from normal theory that the sampling distribution of the mean should look like in this case?
+
+```{r}
+hist(cflipsamp500)
+```
+
+<p style="margin-left:40px"> : In theory, the sampling distribution of the mean is likely to be distributed normally. In this histogram, it seems that the means are distributed in a bell shape, similar to the normal distribution. </p>
+
+
+d. Experiment with increasing/decreasing the number of original samples (draws within one “sample”) and the number of re-samples (number of times you repeat the sampling process). Pay attention to the impact changing either has on the resulting distribution of sample means, and provide some form of visual demonstration (table and/or figure) to show how sample size changes your results.
+
+<p style="margin-left:40px"> I changed the number of original samples and the number of re-samples in four ways.</p>
+
+d.1. 10 original samples : 10 re-samples
+
+```{r}
+hist(replicate(10,mean(sample(cflip,10,replace=T))),main='10:10', xlab="mean")
+```
+
+d.2. 10 original samples : 1000 re-samples
+
+```{r}
+hist(replicate(1000,mean(sample(cflip,10,replace=T))),main='10:1000', xlab="mean")
+```
+
+d.3. 1000 original samples : 10 re-samples
+
+```{r}
+hist(replicate(10,mean(sample(cflip,1000,replace=T))),main='1000:10', xlab="mean")
+```
+
+d.4. 1000 original samples : 1000 re-samples
+
+```{r}
+hist(replicate(1000,mean(sample(cflip,1000,replace=T))),main='1000:1000', xlab="mean")
+```
+
+<p style="margin-left:40px"> As seen above, the graphs that has greater number of re-samples are more similar to the normal distribution. Thus, it can be said that the size of re-sampling affects more than that of original sampling.</p>
+
+
+11. (also problem 4.17/4.18 in Open Intro 3) Identify hypotheses, For each item, write the null and alternative hypotheses in words and then symbols for each of the following situations.
+<br>
+
+a. New York is known as city that never sleeps. A random sample of 25 New Yorkers were asked how much sleep they get per night. Do these data provide convincing evidence thatNew Yorkers on average sleep less than 8 hours a night?
+
+
+<p style="margin-left:40px"> **Null Hypothesis**: New Yorkers sleep eight hours per day on average.</p>
+<p style="margin-left:40px"> **Alternative Hypothesis**: New Yorkers sleep less than eight hours per day on average.</p>
+
+$$H_{0}: \mu =8$$
+$$H_{A}: \mu<8$$
+
+
+b. Employers at a firm are worried about the effect of March Madness, a basketball championship held each spring in the US, on employee productivity. They estimate that on a regular businessday employees spend on average 15 minutes of company time checking personal email, making personal phone calls, etc. They also collect data on how much company time employees spend on such non-business activities during March Madness. They want to determine if these data provide convincing evidence that employee productivity decreases during March Madness.
+
+
+<p style="margin-left:40px"> **Null Hypothesis**: Employees spend on average 15 minutes of company time for non-business activities during March Madness.</p>
+<p style="margin-left:40px"> **Alternative Hypothesis**: Employees spend more than 15 minutes of company time on average for non-business activities during March Madness.</p>
+
+$$H_{0}: \mu =15$$
+$$H_{A}: \mu>8$$
+
+
+c. Since 2008, chain restaurants in California have been required to display calorie counts of each menu item. Prior to menus displaying calorie counts, the average calorie intake of diners at a restaurant was 1100 calories. After calorie counts started to be displayed on menus,a nutritionist collected data on the number of calories consumed at this restaurant from a random sample of diners. Do these data provide convincing evidence of a difference in theaverage calorie intake of a diners at this restaurant?
+
+
+<p style="margin-left:40px"> **Null Hypothesis**: The average calorie intake of diners at a restaurant after the calorie counts displayed is 1100 calories, same as before.</p>
+<p style="margin-left:40px"> **Alternative Hypothesis**: The average calorie intake of diners at a restaurant has changed after the calorie counts displayed.</p>
+
+$$H_{0}: \mu =1100$$
+$$H_{A}: \mu \neq 1100$$
+
+
+d. Based on the performance of those who took the GRE exam between July 1, 2004 and June 30, 2007, the average Verbal Reasoning score was calculated to be 462. In 2011 the average verbal score was slightly higher. Do these data provide convincing evidence that the average GRE Verbal Reasoning score has changed since 2004?
+
+<p style="margin-left:40px"> **Null Hypothesis**: The average Verbal Reasoning score has not changed since 2004.</p>
+<p style="margin-left:40px"> **Alternative Hypothesis**: The average Verbal Reasoning score has changed since 2004.</p>
+
+$$H_{0}: \mu =462$$
+$$H_{A}: \mu \neq 462$$
+
+
+12. (also 4.30 in Open Intro 3) A food safety inspector is called upon to investigate a restaurant with a few customer reports of poor sanitation practices. The food safety inspector uses a hypothesis testing framework to evaluate whether regulations are not being met. If he decides the restaurant is in gross violation, its license to serve food will be revoked.
+
+
+a. Write the hypotheses in words.
+
+$$H_{0}: The\ restaurant\ is\ not\ in\ gross\ violation.$$
+$$H_{A}: The\ restaurant\ is\ in\ gross\ violation.$$
+
+b. What is a Type 1 Error in this context?
+
+<p style="margin-left:40px"> : In this context, 'rejecting the null hypothesis that the restaurant is not in gross violation and concluding that the restaurant is in gross violation, even though the restaurant is actually not' can be the Type 1 Error.</p>
+
+c. What is a Type 2 Error in this context?
+
+<p style="margin-left:40px"> : In this context, 'Accepting the null hypothesis that the restaurant is not in gross violation, even though the restaurant is actually in gross violation' can be the Type 2 Error.</p>
+
+d. Which error is more problematic for the restaurant owner? Why?
+
+<p style="margin-left:40px"> : Type 1 Error is more problematic for the restaurant owner, since it might cause his/her license to serve food to be revoked.</p> 
+
+e. Which error is more problematic for the diners? Why?’
+
+<p style="margin-left:40px"> : Considering that the diners would not like to eat something that might be contaminated by poor sanitation practices, Type 2 Error is more problematic for them.</p>
+
+<br>
+
+**Acknowledgement**
+
+I received a lot of help from the websites below:
+
+*Shading the normal distribution*
+
+http://www.r-bloggers.com/creating-shaded-areas-in-r/
+
+http://www.cyworld.com/soeque1/7834026 (in Korean)
+
+*Using LaTeX symbols*
+
+http://www.rpi.edu/dept/arc/training/latex/LaTeX_symbols.pdf
+
+
+<br>

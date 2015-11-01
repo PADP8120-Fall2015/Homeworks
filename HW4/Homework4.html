@@ -94,15 +94,11 @@ img {
 <h2>Problems</h2>
 <div id="problem-1." class="section level3">
 <h3>Problem 1.</h3>
-<p>Write a function that emulates the <code>lm</code> function in R for a simple (bivariate) regression. Like the <code>lm</code> function, your function should be able to estimate and report to the screen <code>B_k</code> coefficients, standard errors for these coefficients, and corresponding t-values and p-values. It should also report the residual standard error and <span class="math">\(R^2\)</span>. Be sure to show your code. Compare your results to the results of the <code>lm</code> function on some data of your choosing to verify that things are working correctly.</p>
-</div>
-<div id="problem-2." class="section level3">
-<h3>Problem 2.</h3>
 <p>Imagine that you’ve been urged by the teachers’ union to show that higher teacher pay leads to better education outcomes. Of course, you don’t do advocacy research — you are a seeker of truth — but you decide to investigate this questions scientifically using data about SAT scores and other educational indicators at the state level. For now we can pretend that this is the only available data (it comes from John Fox’s website). <a href="http://socserv.socsci.mcmaster.ca/jfox/Books/Applied-Regression-2E/datasets/States.pdf">Read the data documentation</a> and use the code below to load it</p>
 <ol style="list-style-type: example">
-<li><p>Make a scatter plot showing the relationship between average teacher pay and average sat score at the state level. To do this you might have to create a new variable. And, overlay a regression line on the plot.</p></li>
+<li><p>Make a scatter plot showing the relationship between average teacher pay and average sat score (combined verbal and math) at the state level. To do this you might have to create a new variable. And, overlay a regression line on the plot.</p></li>
 <li><p>Fit a simple regression model to predict total SAT score based on teacher pay.</p></li>
-<li><p>Check whether the conditional mean of Y|X is a linear function of X.</p></li>
+<li><p>Does Y appear to be a linear function of X?</p></li>
 <li><p>Check whether the variance of Y|X is the same for any X.</p></li>
 <li><p>Check whether the errors (and thus the Y|X) are independent of one another).</p></li>
 <li><p>Check whether the errors are normally distributed with mean zero.</p></li>
@@ -110,8 +106,8 @@ img {
 <li><p>Explain the substantive conclusion that you would draw from the scatter plot and regression analysis. Be sure to interpret the coefficient in a complete sentence.</p></li>
 </ol>
 </div>
-<div id="problem-3." class="section level3">
-<h3>Problem 3.</h3>
+<div id="problem-2." class="section level3">
+<h3>Problem 2.</h3>
 <p>You don’t necessarily believe these results, and think there might be more to the story. Thus, you decide to carry on to a multiple regression analysis using more variables.</p>
 <ol start="9" style="list-style-type: example">
 <li><p>Using a figure or table, examine the pairwise correlations amongst potential model variables (go ahead and exclude the categorical indicators <code>state</code> and <code>region</code>. Comment on these results and how they will affect your model fitting.</p></li>
@@ -126,8 +122,8 @@ img {
 <li><p>Provide an interpretation (using sentences as you might in an academic journal) of your coefficient results.</p></li>
 </ol>
 </div>
-<div id="problem-4." class="section level3">
-<h3>Problem 4.</h3>
+<div id="problem-3." class="section level3">
+<h3>Problem 3.</h3>
 <p>Examine Angell’s data on the moral integration of U.S. cities (Angells is a data file in the car library).</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(car)
 <span class="kw">data</span>(<span class="st">&quot;Angell&quot;</span>)</code></pre>
@@ -136,20 +132,24 @@ img {
 <li><p>Report the finding of the results. Be sure to use a table to report <span class="math">\(\beta_0\)</span>, <span class="math">\(\beta_1\)</span>, and <span class="math">\(\beta_2\)</span> and statistics that allow for significance tests to be performed on these three coefficients. Write a paragraph to substantively explain the results of the model.</p></li>
 </ol>
 </div>
+<div id="bonus" class="section level3">
+<h3>Bonus</h3>
+<p>Write a function that emulates the <code>lm</code> function in R for a simple (bivariate) regression. Like the <code>lm</code> function, your function should be able to estimate and report to the screen <code>B_k</code> coefficients, standard errors for these coefficients, and corresponding t-values and p-values. It should also report the residual standard error and <span class="math">\(R^2\)</span>. Be sure to show your code. Compare your results to the results of the <code>lm</code> function on some data of your choosing to verify that things are working correctly.</p>
+</div>
 <div id="report-your-process" class="section level3">
 <h3>Report your process</h3>
 <p>You’re encouraged to reflect on what was hard/easy, problems you solved, helpful tutorials you read, etc. Give credit to your sources, whether it’s a blog post, a fellow student, an online tutorial, etc.</p>
 </div>
 <div id="rubric" class="section level3">
 <h3>Rubric</h3>
-<p>Minus: Didn’t tackle at least 3 tasks. Or didn’t make companion graphs. Didn’t interpret anything but left it all to the “reader”. Or more than one technical problem that is relatively easy to fix. It’s hard to find the report in our repo.</p>
+<p>Minus: Didn’t tackle at least 3 tasks. Didn’t interpret anything but left it all to the “reader”. Or more than one technical problem that is relatively easy to fix. It’s hard to find the report in our repo.</p>
 <p>Check: Completed, but not fully accurate and/or readable. Requires a bit of detective work on my part to see what you did</p>
 <p>Check plus: Hits all the elements. No obvious mistakes. Pleasant to read. No heroic detective work required. Solid.</p>
 <div id="the-command-below-is-helpful-for-debugging-please-dont-change-it" class="section level4">
 <h4>The command below is helpful for debugging, please don’t change it</h4>
-<pre><code>## R version 3.2.1 (2015-06-18)
+<pre><code>## R version 3.2.2 (2015-08-14)
 ## Platform: x86_64-apple-darwin13.4.0 (64-bit)
-## Running under: OS X 10.10.4 (Yosemite)
+## Running under: OS X 10.11 (El Capitan)
 ## 
 ## locale:
 ## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
@@ -158,17 +158,20 @@ img {
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] car_2.0-26  dplyr_0.4.2
+## [1] car_2.1-0   dplyr_0.4.3
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.0     knitr_1.10.5    magrittr_1.5    splines_3.2.1  
-##  [5] MASS_7.3-40     lattice_0.20-31 R6_2.1.0        minqa_1.2.4    
-##  [9] stringr_1.0.0   tools_3.2.1     nnet_7.3-9      parallel_3.2.1 
-## [13] pbkrtest_0.4-2  grid_3.2.1      nlme_3.1-120    mgcv_1.8-6     
-## [17] quantreg_5.11   DBI_0.3.1       htmltools_0.2.6 yaml_2.1.13    
-## [21] lme4_1.1-8      lazyeval_0.1.10 assertthat_0.1  digest_0.6.8   
-## [25] Matrix_1.2-1    nloptr_1.0.4    formatR_1.2     evaluate_0.7   
-## [29] rmarkdown_0.7   stringi_0.5-5   SparseM_1.6</code></pre>
+##  [1] Rcpp_0.12.1        knitr_1.11         magrittr_1.5      
+##  [4] splines_3.2.2      MASS_7.3-44        lattice_0.20-33   
+##  [7] R6_2.1.1           minqa_1.2.4        stringr_1.0.0     
+## [10] tools_3.2.2        nnet_7.3-11        parallel_3.2.2    
+## [13] pbkrtest_0.4-2     grid_3.2.2         nlme_3.1-122      
+## [16] mgcv_1.8-7         quantreg_5.19      DBI_0.3.1         
+## [19] MatrixModels_0.4-1 htmltools_0.2.6    yaml_2.1.13       
+## [22] lme4_1.1-9         lazyeval_0.1.10    assertthat_0.1    
+## [25] digest_0.6.8       Matrix_1.2-2       nloptr_1.0.4      
+## [28] formatR_1.2.1      evaluate_0.8       rmarkdown_0.8     
+## [31] stringi_0.5-5      SparseM_1.7</code></pre>
 </div>
 </div>
 </div>

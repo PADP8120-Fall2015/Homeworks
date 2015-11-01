@@ -1,0 +1,233 @@
+---
+title: "ZierHW2"
+author: "Emily Zier"
+date: "September 22, 2015"
+output: html_document
+---
+
+
+
+```
+#Question 1
+
+pnorm(19, mean=35, sd=8, lower.tail=TRUE)
+#This shows the probability that a WWE program that has less than 19 bashings is 0.02275013. 
+
+pnorm(40, mean=35, sd=8, lower.tail=FALSE)
+#This shows the probability that a WWE program has more than 40 bashings is 0.2659855
+
+0.2659855+0.02275013
+# The probability of less than 19 and more than 40 bashings is 0.2887356 or 0.289
+
+#Thank you to: http://www.cyclismo.org/tutorial/R/probability.html for helping me on this question. 
+
+#Question 2
+
+#a
+EventA <- 0.37+.2+.13+.03
+# EventA is equal to 0.73
+
+#b
+EventB <-.37+.21+.06
+#EventB is equal to 0.64
+
+#c
+ComplementA <- .21+.06
+# The complement of A, which is the probability of A not happening is 0.27
+
+#d
+#The interesection of two events mean that they both are able to occur. Event A occurs when it is more than six days, or 7,8,9,10 days. Event B occurs when it is less than 8 days, so 7,6,5 days. Event A and B intersect only at 7 days. The probability at 7 days is equal to 0.37. 
+
+#e
+#The union of two events means that both events probabilities can occur. So, the probability of both a and b occuring is the probability of all possible events occuring, which adds up to 1. 
+
+#Thank you to: 
+#https://en.wikipedia.org/wiki/Complementary_event
+#https://people.richland.edu/james/lecture/m170/ch05-rul.html for helping me on this question. 
+
+#Question 3
+
+#notes: 
+
+firsttimeracersfinish <- .68 
+repeatracersfinish <-.87 
+repeatracer <-.64
+firsttimeracer <-.36
+
+
+#a
+repeatracer*repeatracersfinish
+
+repeatfinisher <- .56
+
+#the probability that a randomly chosen entrant is a repeat racer, which I created as an object, and finishes the race, which I also created as an object, is 0.56.
+
+#b
+(firsttimeracersfinish*firsttimeracer)+(repeatracersfinish*repeatracer)
+
+racefinisher <- 0.8016
+
+#The probability that any randomly chosen entrant will finish is 0.8016. 
+
+#c
+(repeatracer+racefinisher) - repeatfinisher
+
+#The probability that a randomly chosen person is a repeat racer is .64, and the probability that a randomly chosen person, repeat racer or not, finishes the race is .80. Once we add these together we then have to account for the racers who are repeat racers who finished because they were counted twice so we subtract .56 to get .88.
+
+
+#Question 4
+
+#notes
+art <- .35
+chess <- .40
+
+
+#a
+artandchess <-(art*.20)
+
+#The probability a random student signed up for both clubs is .07.
+
+#b
+
+7/40
+
+#40% of students are in chess, and 7% of students are in art and chess. So, 33% of all students are solely in chess club. So, we know that 40 students are in chess, and seven of them are in both, so the probability that a student who signed up for chess and also for art is 7 out of 40 which is equal to 0.175.
+
+#c
+
+(art+chess) - artandchess
+
+#The probability a student signed up for art added to the probability a student signed up for chess equals .75. However, some students are in both classes and double counted, so we subtract the students who signed up for both to get .68. 
+
+
+Thank you to: http://spia.uga.edu/faculty_pages/tyler.scott/teaching/PADP8120_Fall2015/Homeworks/HW2/Homework2_Key.html
+for helping me with this question. 
+
+
+#Question 5
+
+allstudents <-442
+unvaccinatedstudents <-84
+absentrate <- .08
+
+unvaccinatedstudents*absentrate
+
+#By multiplying the amount of unvaccinated students in the school by the probability of absences we can assume about 6 or 7 students will miss the doctor (the exact answer is 6.72)
+
+
+#Question 6
+
+#a
+pnorm(210,mean = 180,sd =25,lower.tail=FALSE)
+
+#the probability that x is greater than 210 is 0.1150697
+
+#b 
+pnorm(182, mean=180, sd=25, lower.tail=TRUE)
+
+#the probability that y is less than 182 is 0.5318814
+
+#c
+1-pnorm(160, mean=180, sd=25, lower.tail=TRUE)-pnorm(192, mean=180, sd=25, lower.tail=FALSE)
+
+#the probability that z is between 160 and 192 is 0.4725309
+
+#Thank you to:https://stat.ethz.ch/pipermail/r-help/2007-June/133748.html
+for helping me with this question. 
+
+#Question 7
+
+#a
+.15+.15+.35 
+
+#the probability x is less than or equal to 0 is 0.65
+
+#b
+.35+.25+.10
+
+#the probability that x is greater than -1 is 0.7
+
+#c
+.15+.35+.25
+
+#the probability that x is greater than or equal to -1 and less than or equal to 1 is 0.75
+
+#d
+.25+.35+.15+.15
+
+#the probability that x is less than two is .9
+
+#e
+.35+.25
+
+#the probability that x is greater than -1 and less than 2 is 0.6
+
+#Question 9
+
+cflip = rbinom(20,1,.55)
+
+#a
+cflipsamp = sample(cflip,20,replace=T)
+mean(cflipsamp)
+#the mean of fclipsamp I found is 0.7
+
+#b
+cflip.samp.500 <-replicate(500, mean(sample(cflip,20,replace=T)))
+
+#c
+hist(cflip.samp.500)
+
+#d
+cflip.samp.200 <-replicate(200, mean(sample(cflip,20,replace=T)))
+hist(cflip.samp.200)
+
+cflip.samp.10 <-replicate(10, mean(sample(cflip,20,replace=T)))
+hist(cflip.samp.10)
+
+cflip.samp.200v2 <-replicate(200, mean(sample(cflip,50,replace=T)))
+hist(cflip.samp.200v2)
+#when you increase the draws to 200 and have them repeated 50 times the average definitely hovers more strongly around .55
+
+#Question 11
+
+#a
+H0: m = 8, New yorkers sleep 8 hours a night on avg.
+HA: m < 8, New yorkers sleep less than 8 hours a night on avg. 
+
+#b
+H0: m = 15, Employees spend 15 mins per day on email in Mar
+HA: m > 15, Employees spend more than 15 mins per day on email in Mar
+
+#c
+H0: m = 1100, People in CA consume on avg 1100 cals at restaurants
+HA: m! = 1100, People in CA do not consume on avg 1100 cals at restaurants
+
+#d
+H0: m = 462, the average GRE score is 462
+HA: m! = 462, the average GRE score is not 462
+
+#Question 12
+
+#a
+H0: The restaurant is meeting regulations.
+HA: The restaurant is not meeting regulations. 
+
+#b
+Type 1 Error: Saying that the restaurant is not meeting regulations when it is (rejecting the null when it is true)
+
+#c
+Type 2 Error: Not recognizing the restaurant isn't meeting regulations when it isn't meeting regulations (failing to reject a null when it is false)
+
+#d
+For the OWNER Type 1 would be worse because the restaurant is meeting regulations and still being shut down. 
+
+#e
+For the DINERS Type 2 would be worse because the restaurant isn't meeting regulations and nobody is recognizing that/doing anything about it. 
+
+Thank you to:https://en.wikipedia.org/wiki/Type_I_and_type_II_errors for helping me with this question. 
+
+#Reporting my Process
+I googled a little bit and referred to the key occasionally. I found question 9 to be especially difficult but otherwise thought the questions were reasonable and I feel much more comfortable with probabilities now! For each question that I used google I listed the website used at the end. 
+
+```
+

@@ -1,0 +1,315 @@
+---
+title: "Coxon_HW3_ThirdTry"
+author: "Victoria Coxon"
+date: "October 7, 2015"
+output: html_document
+---
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+## Problems
+
+For problems 1-4, Load the `foreign` library and download Alvarez et al.’s (2013) data in Stata format, which are available at: `http://j.mp/alpl2013`. These data are from a field experiment in Salta, Argentina in which some voters cast ballots through e-voting, and others voted in the traditional setting. The variables are: an indictor for whether the voter used e-voting or traditional voting (`EV`), age group
+(`age_group`), education (`educ`), white collar worker (`white_collar`), not a full time
+worker (`not_full_time`), male (`male`), a count variable for number of six possible
+technological devices used (`tech`), an ordinal scale for political knowledge
+(`pol_info`), a character vector naming the polling place (`polling_place`), whether the
+respondent thinks poll workers are qualified (`capable_auth`), whether the voter evaluated
+the voting experience positively (`eval_voting`), whether the voter evaluated the
+speed of voting as quick (`speed`), whether the voter is sure his or her vote is being
+counted (`sure_counted`), whether the voter thought voting was easy (`easy_voting`),
+whether the voter is confident in ballot secrecy (`conf_secret`), whether the voter
+thinks Salta’s elections are clean (`how_clean`), whether the voter thinks e-voting
+should replace traditional voting (`agree_evoting`), and whether the voter prefers selecting
+candidates from different parties electronically (`eselect_cand`).
+
+```{r}
+library(foreign)
+AR.voting.data = read.dta('http://j.mp/alpl2013')
+```
+
+1. Consider the number of technological devices. Test the hypothesis that the average
+Salta voter has used more than three of these six devices. (Formally: $H_0: \mu = 3; H_A: \mu > 3$)
+```{r} 
+# Because this is one sample, the data are  independent, and the n > 30, I can assume normality and proceed with testing the hypotheses using a One Sample t-test.
+#?t.test
+# GUIDE: t.test(x,mu=3) # Ho: mu=3
+t.test(x = AR.voting.data$tech,alternative = 'greater',mu = 3)
+```
+The $p(t_{obs} > t_{\alpha=0.05,df=1474})$ and even beyond the $p(t_{\alpha=0.001,df=1474}). Therefore, we  can reject the null hypothesis and conclude that the average number of devices used per person in this population is greater than 3.
+
+***
+
+2. Conduct two independent sample difference of means tests:
+a. Is there any difference between men and women in how many technological
+devices they have used?
+```{r}
+# GUIDE: t.test(x = data$DV_variable[data$IV_variable==...],y = data$DV_variable[data$IV_variable==...]],mu=0,alternative='two.sided')
+
+t.test(x=AR.voting.data$tech[AR.voting.data$male==1],y=AR.voting.data$tech[AR.voting.data$male==0],mu=0,alternative='two.sided')
+```
+We fail to reject the null because the $p(t_{obs} < t_{\alpha=0.05, df=1466.2})$. We can conclude that there is no statistical difference between males and females regarding the quantity of technological devices they have used.
+
+b. Is there any difference in how positively voters view the voting experience
+(eval voting) based on whether they used e-voting or traditional voting (EV)?
+```{r}
+str(AR.voting.data$eval_voting)
+# With 1=positive experience and 0=otherwise
+str(AR.voting.data$EV)
+# With 1=e-voting and 0=traditional voting
+# GUIDE: t.test(x = data$DV_variable[data$IV_variable==...],y = data$DV_variable[data$IV_variable==...]],mu=0,alternative='two.sided')
+t.test(x = AR.voting.data$eval_voting[AR.voting.data$EV==1],y = AR.voting.data$eval_voting[AR.voting.data$EV==0],mu=0,alternative='two.sided')
+```
+We can reject the null at both the 0.05 and the 0.001 levels because the p(t_{obs} > t_{\alpha=0.05,df=1421.1}). We have strong support to conclude that there is a significant difference in average voter satisfaction based on voter usage of e-voting or traditional voting methods.
+
+*** 
+3. Construct two cross-tabulations:
+
+a. Construct a cross-tabulation where the dependent variable is how positively
+voters view the voting experience (eval voting) and the independent variable
+is whether they used e-voting or traditional voting (EV). 
+```{r}
+#?table
+# GUIDE: table(data$IV_variable,data$DV_variable)
+# GUIDE 2: mytable <- table(A,B) 
+# A will be rows, B will be columns 
+table(AR.voting.data$EV,AR.voting.data$eval_voting)
+```
+Does the distribution of voting evaluation depend on whether the voter used e-voting?
+```{r}
+#This question is asking about the variance between the method of voting (EV==1,
+#EV==0)-my IV/explanatory variable/x; and the voting_eval==1 or ==0 -my  DV/response variable/y.
+#?aov -> This means "analysis of variance".
+#ANOVA's parameter is the F-statistic with an associated p-value. It tells us if any of the groups we are comparing are different from the other groups. Unfortunately,  it doesn't tell us which group is different.
+aov(AR.voting.data$eval_voting~AR.voting.data$EV) #This is the regular ANOVA test without the summary statistics. 
+# GUIDE: summary(aov(DV~IV))
+summary(aov(AR.voting.data$eval_voting~AR.voting.data$EV)) #This gives us the summary statistics and p-value we need.
+```
+The difference between the  method of voting (E-voting or Traditional Ballot) and the average voter satisfaction (positive or  not) was statistically significant  ($F_{obs} > F_{\alpha=0.05,df_1=1,df2=1458}$). We can conclude that voters who used E-voting had a different experience than those who used traditional ballot voting. 
+
+b. Construct a cross-tabulation where the dependent variable is how positively
+voters view the voting experience (eval voting) and the independent variable
+is the ordinal scale of political knowledge (pol info). Does the distribution of
+voting evaluation change with the voter’s level of political knowledge?
+```{r}
+# GUIDE: table(data$IV_variable,data$DV_variable)
+# GUIDE 2: mytable <- table(A,B) 
+# A will be rows, B will be columns 
+table(AR.voting.data$pol_info,AR.voting.data$eval_voting)
+#pol_info is an ordinal variable with a scale of 1-5 that measures political knowledge. We need it to act as a categorical variable. It could be counted as numerical but this could lead to irresponsible conclusions. We need to maintain the integrity of the values and  look at the differences between the groups at levels 1, 2,3,4, and 5 to see if any differences appear.
+
+# GUIDE: summary(aov(DV~IV)); as.character helps R deal with the ordinal pol_info variable.
+summary(aov(AR.voting.data$eval_voting~as.character(AR.voting.data$pol_info)))
+```
+The difference between the  political knowledge (at levels 1-5) and the average voter satisfaction (positive or  not) was statistically significant  ($F_{obs} > F_{\alpha=0.05,df_1=1,df2=1458}$). We can conclude that on average, voters who have varying levels of political knowledge assess voting satisfaction differently. 
+
+***
+
+4. Consider the correlation between level of education (`educ`) and political knowledge
+(`pol info`):
+a. Using the `cor()` function, compute Pearson’s `r` between these two variables.
+Level of education is a discrete, numerical variable;the y variable needs to be compatible. In order to find the correlation between educational level and political information in R, we now have to treat pol_info as a numerical variable instead of as a categorical variable as demonstrated in the previous exercise.
+```{r}
+#?cor()
+# GUIDE: cor(x, y = NULL, use = "everything",method = c("pearson", "kendall", "spearman"))
+cor(AR.voting.data$educ,AR.voting.data$pol_info,method = "pearson")
+str(AR.voting.data$educ)
+```
+Using Pearson's r, the correlation between educational level and political knowledge is 0.3540482 or 0.354. For every one unit increase in educational level, political knowledge may increase by 0.354 units.
+
+b. Many argue that, with two ordinal variables, a more appropriate correlation
+measure is Spearman’s $\rho$, which is a rank correlation. Compute $\rho$ (again using the `cor()` function - consult `?cor` if you're stuck) and contrast the results from $r$.
+```{r}
+# This exercise is asking us to treat educational level and political knowledge as ordinal, categorical variables instead of as discrete, numerical variables. 
+cor(AR.voting.data$educ,AR.voting.data$pol_info,method = "spearman")
+```
+The correlation between educational level and political knowledge using Spearman's $/rho$ is 0.3267048 or 0.327.  For every one unit increase in educational level, political knowledge may increase 0.327 units.
+
+***
+
+5. You are interested in the impact that Hurricane Katrina (and the government's response to Hurricane Katrina) had on President Bush's approval rating. In a Aug. 24, 2005 Gallup poll, 55% of the 814 people surveyed answered that they approved of George W. Bush's handling of his job as president. In a Sept. 14, 2005 Gallup poll, 48% of the 1032 people surveyed answered that they approved of George W. Bush?s handling of his job as president.
+a. At a 99% significance level, did the proportion of Americans that approve of Bush's job as president change after Katrina?
+```{r}
+#The data is presented  as percentages; this translates into proporations and thus, require a sample proportion t-test.
+n1 = 814; n2 = 1032
+pihat1 = 0.55; pihat2 = 0.48  
+#Conversely, 1-pihat1 = 0.45 and 1-pihat2 = 0.52.
+# H0: President Bush's (43) approval ratings from August 24, 2005 and September 14, 2005 did not differ.
+# HA: President Bush's (43) approval ratings from August 24, 2005 and September 14, 2005 did differ.
+# SE pool FORMULA: sqrt [pi hat1(1-pi hat1)/n1 + pi hat2(1-pi hat2)/n2]
+# CI FORMULA: (pi hat2 - pi hat1) + - z(SE pool)
+# z = (pi hat2 - pi hat1) - 0/ SE pool
+#?prop.test
+#prop.test can be used for testing the null that the proportions (probabilities of success) in several groups are the same, or that they equal certain given values.
+# GUIDE: prop.test(x = # of successes, n = # of trials)
+# GUIDE 2: prop.test(x, n, p = NULL,alternative = c("two.sided", "less",
+# "greater"),conf.level = 0.95, correct = TRUE)
+prop.test(x=c(n1*pihat1,n2*pihat2), n = c(n1,n2),alternative = c("two.sided"),conf.level = 0.99,correct = TRUE)
+```
+We can reject the null because the $p_{obs} < p_{0.01}$. Based on these statistics, there is good evidence that there is a significant difference in the proportion of voters who approved of President Bush (43) before and after Hurricane Katrina.
+
+b. Construct a 95% confidence interval to test whether the proportion changed. Interpret the confidence interval.
+```{r}
+# CI FORMULA: (pi hat2 - pi hat1) + - z(SE pool) 
+# SE pool FORMULA: sqrt [pi hat1(1-pi hat1)/n1 + pi hat2(1-pi hat2)/n2]
+# z = (pi hat2 - pi hat1) - 0/ SE pool
+SEpool = sqrt((pihat1 * (1-pihat1) / n1 + pihat2 * (1-pihat2) / n2))
+Bush.pdiff = pihat2 - pihat1
+Bush.zobs = Bush.pdiff / SEpool
+#?pnorm
+pnorm(Bush.zobs)  #This gives the one tailed p-value for Bush.zobs.
+2*(pnorm(Bush.zobs))  #This gives the two-tailed p-value for Bush.zobs.
+#If we are intrested in the 95% CI, then we need to look at the 2.5 %ile and the 97.5 %ile. I need to use the "qnorm" function.
+# # CI FORMULA: (pi hat2 - pi hat1) + - z(SE pool) 
+Bush.pdiff + qnorm(c(0.025,0.975)) * SEpool
+# |-0.11579419 -0.02420581| = 0.11579419 to 0.02420581
+```
+Using this method of hypothesis testing, we can (still) reject the null because the $p_{obs} < p_{0.01}$ with $p_{obs}$ = 0.001367921. Additionally, we can be 95% confident that the true value of the difference in voter approval is between 0.024 and 0.116 ($0.02420581 < p_{2} - p_{1} < 0.11579419$).
+
+***
+
+6. (also Open Intro 5.11) The School for Kids Who Are Good At Music and Want To Learn To Do Other Stuff Good Too (SFKWAGAMAWTLTDOSGT) claims that its students take at least 5 years of piano lessons on average. We have a random sample of 20 former SFKWAGAMAWTLTDOSGT students, with a mean of 4.6 years of piano lessons and a standard deviation of 2.2 years.
+a. Evaluate SFKWAGAMAWTLTDOSGT's claim using a hypothesis test.
+SFKWAGAMAWTLTDOSGT claims that its students take at least 5 years of piano lessons on average. This has implications or the type of hypothesis test we choose to employ. The null hypothesis assumes that the average is > or = 5.
+$H_0$:$\mu >= 5$
+Because we are interested in evaluating SFKWAGAMAWTLTDOSGT's claim that its students take at least 5 years of piano lessons, we frame the alternative hypothesis as follows:
+$H_A$: $\mu < 5$
+```{r}
+n = 20
+df.sample = n-1
+xbar = 4.6 
+EV = 5
+sd = 2.2
+#Need to use the t-distribution because n<30.
+# t.obs = (obs value - expected value) / (sd/[sqrt(n)])
+t.obs = (xbar - EV) / (sd/sqrt(n))
+SE = (sd/sqrt(n))
+#?pt
+# GUIDE: pt(q, df, ncp, lower.tail = TRUE, log.p = FALSE)
+pt(t.obs,df = df.sample, lower.tail = TRUE)
+# 0.213112
+```
+The $\alpha$ = 0.05 for this t-test. Because the observed p-value is 0.213112, we fail to reject the null and conclude that there is not enough evidence to challenge SFKWAGAMAWTLTDOSGT's claim that its students, on average, take at least 5 years of piano lessons.
+
+b. Construct a 95% confidence interval for the number of years SFKWAGAMAWTLTDOSGT students take piano lessons, and interpet it in context of the data.
+```{r}
+# GUIDE: mean point estimate + qt(p, df, lower.tail = TRUE)
+#If we are intrested in the 95% CI, then we need to look at the 2.5 %ile and the 97.5 %ile.
+4.6 + qt(c(0.025,0.975),df=df.sample ) * SE
+```
+We can be 95% confident that the true value of the average number of years of piano lessons at SFKWAGAMAWTLTDOSGT is between 3.570 5.630 ($3.570368 < \mu_{piano} < 5.629632$).
+
+c. Do your results from the hypothesis test and the confidence interval agree? Explain your
+reasoning.
+Yes, the t-test and the 95% confidence interval agree; the $\mu_{piano}$ is included within the range of possible values contained in the 95% confidence interval.
+
+***
+7. (also Open Intro 5.19) Let’s consider how temperatures have changed in the US from 1968 to 2008.
+The daily high temperature reading on January 1 was collected in 1968 and 2008 for 51 randomly
+selected locations in the continental US. Then the difference between the two readings (temperature
+in 2008 - temperature in 1968) was calculated for each of the 51 different locations. The average
+of these 51 values was 1.1 degrees with a standard deviation of 4.9 degrees. We are interested in
+determining whether these data provide strong evidence of temperature warming in the continental US.
+
+(a) Write hypotheses for this research in symbols and in words.
+$H_0$: $\mu_{2008} - \mu_{1968} <= 0$ 
+Null: The 2008 average temperature is less than or is no different from the 1968 average temperature.
+$H_A$: $\mu_{2008} - \mu_{1968} > 0$
+Alternative: The 2008 average temperature is greater than the 1968 average temperature.
+(This necessitates a one-tailed t-test to test the hypotheses.)
+
+(b) Check the conditions required to complete this test.
+CONDITIONS: 
+1. INDEPENDENCE?
+Yes; the locations had the same probability of being initially picked and with only 51 locations, they comprise less than 10% of the available temperature-taking locations in the United States.
+2. NEARLY NORMAL DISTRIBUTION?
+Possibly; we cannot confirm the normality assumption because we cannot see the data to determine if there a significant skew. It is possible that there are extreme values (Death Valley or Juneau, Alaska), but I am making the assumption that the experiment planners tried to get observations that reflected the range of normal temperatures seen throughout the continental U.S. Quite possibly, there is a value for each state. Nevertheless, n > 30, making it possible and appropriate to use the t-distribution. 
+
+(c) Calculate the test statistic and find the p-value.
+```{r}
+n = 51
+df.sample = n-1
+xbar = 1.1
+sd = 4.9
+EV = 0
+# t.obs = (obs value - expected value) / (sd/[sqrt(n)])
+t.obs = (xbar - EV) / (sd/sqrt(n))
+t.obs
+SE = (sd/sqrt(n))
+#?pt
+# GUIDE: pt(q, df, ncp, lower.tail = TRUE, log.p = FALSE)
+pt(t.obs,df = df.sample, lower.tail = FALSE)
+#0.05759731
+```
+
+(d) What do you conclude? Interpret your conclusion in context.
+The $\alpha$ = 0.05 for this t-test. Because the observed p-value is 0.05759731 (or rather 0.058), we barely fail to reject the null and conclude that there is not enough evidence to indicate that there has been an increase in the average temperature from 1968 to 2008. Interestingly, if we ran a t-test with an $\alpha$ = 0.10, we could reject the null at this level of significance, but it is possible that we would increase our Type II Error in doing so. That being said, the evidence does seem to point to towards an increase in temperatures that may not yet be statistically significant but could be going forward.
+
+***
+8. Go to Sean Lahman's baseball statistics database and download the 2014 version .csv file (http://seanlahman.com/files/database/lahman-csv_2015-01-24.zip). Read in the file of batting statistics `Batting.csv` and select **only** players-seasons between 2005 and 2009 (try `yearID %in% c(2005:2009)` as your filtering mechanism) and **only** players who have at least 200 at-bats (`AB>=200`).
+
+```{r}
+bat.df = read.csv('input/Batting.csv')
+library(dplyr)
+bat.df <- bat.df %>% filter(yearID %in% c(2005:2009),AB>=200)
+str(bat.df)
+```
+
+(a) Conduct an ANOVA to see whether there is a significant difference in average number of homeruns (`HR`) hit by players in each of these years.
+```{r}
+# GUIDE: table(data$IV_variable,data$DV_variable)
+# GUIDE 2: mytable <- table(A,B) 
+# A will be rows, B will be columns 
+table(bat.df$HR,bat.df$yearID)
+#yearID is an ordinal variable with a scale in actual years. We need it to act as a categorical variable. It could be counted as numerical but this could lead to irresponsible conclusions. We need to maintain the integrity of the values and  look at the differences between the groups at the year levels to see if any differences appear.
+
+# GUIDE: summary(aov(DV~IV)); as.character helps R deal with the yearID variable as a  categorical variable.
+aov(bat.df$HR ~ as.character(bat.df$yearID))
+summary(aov(bat.df$HR ~ as.character(bat.df$yearID)))
+```
+The difference between the yearID and the average home runs was not statistically significant with a p-value = 0.523.  ($P(F_{obs}) < P(F_{\alpha=0.05,df_1=4,df2=1617})$). We can conclude that on average, that the year has almost nothing to do with the average number of home runs hit. 
+
+(b) Using the techniques we employed in lab, conduct a series of pairwise comparisons to identify any significant differences between individual pairs of years. 
+```{r}
+#I am relying on your  code in the HW3 Key. I looked at Lab 8 and saw that we will be learning this soon. I will use R's handy dandy guides to help me better understand what's going on.
+#?pairwise.t.test
+#GUIDE: pairwise.t.test(x, g, p.adjust.method = p.adjust.methods,
+#                pool.sd = !paired, paired = FALSE,
+#                alternative = c("two.sided", "less", "greater"),
+#                ...)
+#WHERE: x	-> response vector.
+#       g	-> grouping vector or factor
+#yearID will be our grouping factor...
+
+#?p.adjust
+#GUIDE: p.adjust.methods
+# c("holm", "hochberg", "hommel", "bonferroni", "BH", "BY",
+#   "fdr", "none")
+pairwise.t.test(x= bat.df$HR,g = bat.df$yearID,alternative='two.sided',p.adj = 'bonferroni')
+```
+
+### Report your process
+
+You're encouraged to reflect on what was hard/easy, problems you solved, helpful tutorials you read, etc. Give credit to your sources, whether it's a blog post, a fellow student, an online tutorial, etc.
+
+I think I mistakenly labeled the SE in Problem 5 SEpool when I should have just left it SE. My thoughts in labeling it SE pool was that I assumed the variance would be the same in each sample since they were pretty large  and approximately normal.  Please advise.
+
+### Rubric
+
+Minus: Didn't tackle at least 3 tasks. Didn't interpret anything but left it all to the "reader". Or more than one technical problem that is relatively easy to fix. It's hard to find the report in our repo.
+
+Check: Completed, but not fully accurate and/or readable. Requires a bit of detective work on my part to see what you did
+
+Check plus: Hits all the elements. No obvious mistakes. Pleasant to read. No heroic detective work required. Solid.
+
+
+#### The command below is helpful for debugging, please don't change it
+
+```{r echo=FALSE}
+sessionInfo()
+```
+
+
+

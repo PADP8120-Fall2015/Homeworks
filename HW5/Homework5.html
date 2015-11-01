@@ -95,7 +95,7 @@ img {
 <h2>Problems</h2>
 <div id="problem-1." class="section level3">
 <h3>Problem 1.</h3>
-<p>Just as you did for Homework 4, write a function that emulates the <code>lm</code> function in R for a simple (bivariate) regression. <em>However, this time your function needs to make use of the matrix regression approach we learned in Week 12.</em> Like the <code>lm</code> function, your function should be able to estimate and report to the screen <span class="math">\(\beta_k\)</span> coefficients, standard errors for these coefficients, and corresponding t-values and p-values. It should also report the residual standard error and <span class="math">\(R^2\)</span>. Be sure to show your code. Compare your results to the results of the <code>lm</code> function on some data of your choosing to verify that things are working correctly.</p>
+<p>Just as you did for Homework 4, write a function that emulates the <code>lm</code> function in R for a simple (bivariate) regression. <em>However, this time your function needs to make use of the matrix regression approach we learned in Week 12.</em> Like the <code>lm</code> function, your function should be able to estimate and report to the screen <span class="math">\(\beta_k\)</span> coefficients, standard errors for these coefficients, and corresponding t-values and p-values. It should also report the residual standard error. Be sure to show your code. Compare your results to the results of the <code>lm</code> function on some data of your choosing to verify that things are working correctly.</p>
 </div>
 <div id="problem-2." class="section level3">
 <h3>Problem 2.</h3>
@@ -128,7 +128,23 @@ occup &lt;-<span class="st"> </span><span class="kw">filter</span>(occup, type %
 <li><p>Use calculus to identify the predicted impact of a one unit change in income on occupational prestige. Assess whether this impact is statistically distinct from zero. Remember that the variance for an estimated marginal effect $  = <em>x + </em>{xz}*z$ where x and z are interacted independent variables, can be calculated by:</p></li>
 </ol>
 <p><span class="math">\[ V(\frac{\partial \hat{y}}{\partial x} = V(\hat{\beta}_x) + z^2 V(\hat{\beta}_{xz} + 2z * Cov(\hat{\beta}_x,\hat{\beta}_{xz}) \]</span></p>
-<p>￼Because the marginal effect of x depends on values of z, you will need to assess whether the marginal effect is significant across a range of values of z.</p>
+<ol start="10" style="list-style-type: example">
+<li>￼Because the marginal effect of x depends on values of z, you will need to assess whether the marginal effect is significant across a range of values of z.</li>
+</ol>
+</div>
+</div>
+<div id="problem-3." class="section level3">
+<h3>Problem 3.</h3>
+<div id="la-housing-prices" class="section level4">
+<h4>LA Housing Prices</h4>
+<p>Load the LA housing prices dataset:</p>
+<pre class="sourceCode r"><code class="sourceCode r">la.dat =<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">'Input/LA.csv'</span>)</code></pre>
+<ol start="11" style="list-style-type: example">
+<li><p>Fit the best model you can to predict housing prices in LA on the basis of theory (i.e., what should matter for house prices?) and model fit (i.e., DO NOT use stepwise regression, but feel free to add/subtract/transform variables as you feel are necessary).</p></li>
+<li><p>Demonstrate the goodness-of-fit of your model (i.e, show that key assumptions appear to be met and that the model would seem to be a viable basis for inference).</p></li>
+<li><p>Interpret your substantive findings.</p></li>
+<li><p>Discuss any potential shortcomings of this model and key future directions that you might take if you sought to better understand LA housing prices.</p></li>
+</ol>
 </div>
 </div>
 <div id="report-your-process" class="section level3">
@@ -142,9 +158,9 @@ occup &lt;-<span class="st"> </span><span class="kw">filter</span>(occup, type %
 <p>Check plus: Hits all the elements. No obvious mistakes. Pleasant to read. No heroic detective work required. Solid.</p>
 <div id="the-command-below-is-helpful-for-debugging-please-dont-change-it" class="section level4">
 <h4>The command below is helpful for debugging, please don’t change it</h4>
-<pre><code>## R version 3.2.1 (2015-06-18)
+<pre><code>## R version 3.2.2 (2015-08-14)
 ## Platform: x86_64-apple-darwin13.4.0 (64-bit)
-## Running under: OS X 10.10.4 (Yosemite)
+## Running under: OS X 10.11 (El Capitan)
 ## 
 ## locale:
 ## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
@@ -153,14 +169,14 @@ occup &lt;-<span class="st"> </span><span class="kw">filter</span>(occup, type %
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] dplyr_0.4.2
+## [1] dplyr_0.4.3
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.0     digest_0.6.8    assertthat_0.1  R6_2.1.0       
-##  [5] DBI_0.3.1       formatR_1.2     magrittr_1.5    evaluate_0.7   
-##  [9] stringi_0.5-5   lazyeval_0.1.10 rmarkdown_0.7   tools_3.2.1    
-## [13] stringr_1.0.0   yaml_2.1.13     parallel_3.2.1  htmltools_0.2.6
-## [17] knitr_1.10.5</code></pre>
+##  [1] Rcpp_0.12.1     digest_0.6.8    assertthat_0.1  R6_2.1.1       
+##  [5] DBI_0.3.1       formatR_1.2.1   magrittr_1.5    evaluate_0.8   
+##  [9] stringi_0.5-5   lazyeval_0.1.10 rmarkdown_0.8   tools_3.2.2    
+## [13] stringr_1.0.0   yaml_2.1.13     parallel_3.2.2  htmltools_0.2.6
+## [17] knitr_1.11</code></pre>
 </div>
 </div>
 </div>

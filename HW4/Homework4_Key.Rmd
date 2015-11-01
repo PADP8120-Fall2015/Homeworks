@@ -1,0 +1,331 @@
+
+---
+title: "PADP8120_Homework4"
+author: "Fall 2015"
+date: "![Creative Commons Attribution License](images/cc-by.png)"
+output:
+  html_document:
+    highlight: pygments
+    theme: cerulean
+widgets     : [mathjax]            # {mathjax, quiz, bootstrap}
+---
+
+
+# Homework 4
+
+Guidelines: Homeworks should be clear and legible, with answers clearly indicated and work shown. Homeworks will be given a minus, check, or check plus owing to completion and correctness. You are welcome to work with others but please submit your own work. Your homework must be produced in an R Markdown (.rmd) file submitted via github. If you are having trouble accomplishing this, please refer to the [guide](http://spia.uga.edu/faculty_pages/tyler.scott/teaching/PADP8120_Fall2015/Homeworks/submitting_homework.shtml). 
+
+
+This homework adapts materials from the work of Michael Lynch (http://spia.uga.edu/faculty_pages/mlynch/) and Matthew Salganik (http://www.princeton.edu/~mjs3/)
+
+## Topics
+
+Topics covered in this homework include:
+
+- Bivariate and multivariate regression
+- Regression diagnostics
+
+## Problems
+
+### Problem 1
+
+Write a function that emulates the `lm` function in R for a simple (bivariate) regression. Like the `lm` function, your function should be able to estimate and report to the screen `B_k` coefficients, standard errors for these coefficients, and corresponding t-values and p-values. It should also report the residual standard error and $R^2$. Be sure to show your code. Compare your results to the results of the `lm` function on some data of your choosing to verify that things are working correctly.
+
+```{r}
+x = rnorm(100)
+y = rnorm(100)
+
+tyler.lm = function(y,x)
+{  
+#note: round to 5 digits to match lm functionality
+#compute b1
+  b1 = round({sum(x * y) - (1/length(y)) * sum(x) * sum(y)} /
+{sum(x^2) - (1/length(y)) * sum(x)^2},5)
+#compute b0
+b0 = round(mean(y) - b1 * mean(x),5)
+#compute SE for regression
+ser = sqrt(sum({(y - (b0 + b1*x))^2})/ (length(y)-2))
+#compute SE for b1
+SEb1 = ser / sqrt(sum({(y - (b0 + b1*x))^2}))
+#compute SE for b0
+SEb0 = (ser * (1/length(y)) * sum(x^2)) /
+sqrt(sum({(y - (b0 + b1*x))^2}))
+#make df to store output
+print.df = data.frame(coef = round(c(b0,b1),3),SE = round(c(SEb0,SEb1),3))
+#calculated t.observed
+print.df$t.obs = round(print.df$coef/print.df$SE,3)
+#calculate p-values
+print.df$p.val = round(2*pt(abs(print.df$t.obs),df=length(x)-2,lower.tail=FALSE),3)
+rownames(print.df) = c('Intercept','X')
+return(print.df)
+}
+
+tyler.lm(y=y,x=x)
+summary(lm(y~x))
+```
+
+### Problem 2 
+
+Imagine that you've been urged by the teachers' union to show that higher teacher pay leads to better education outcomes.  Of course, you don't do advocacy research --- you are a seeker of truth --- but you decide to investigate this questions scientifically using data about SAT scores and other educational indicators at the state level.  For now we can pretend that this is the only available data (it comes from John Fox's website). [Read the data documentation](http://socserv.socsci.mcmaster.ca/jfox/Books/Applied-Regression-2E/datasets/States.pdf) and use the code below to load it
+
+```{r echo=TRUE,message=FALSE,warnings=FALSE}
+library(dplyr)
+setwd("/Users/TScott/Google Drive/Webpage/teaching/PADP8120_Fall2015/Homeworks")
+educ <- read.table("input/States.txt", header=TRUE)
+# now clean up a bit
+educ <- educ %>% rename(sat.verbal = satVerbal, sat.math = satMath, percent.taking = percentTaking, percent.no.hs = percentNoHS, teacher.pay = teacherPay) 
+# not good to have state as a rowname
+educ$state <- rownames(educ)
+rownames(educ) <- NULL
+educ <- tbl_df(educ)
+```
+
+(@) Make a scatter plot showing the relationship between average teacher pay and average sat score (combined verbal and math) at the state level.  To do this you might have to create a new variable.  And, overlay a regression line on the plot.
+
+```{r message = FALSE}
+library(ggplot2)
+ggplot(educ,aes(x=teacher.pay,y=sat.math+sat.verbal)) + geom_point() +
+  geom_smooth(method=lm) + theme_bw() + 
+  scale_x_continuous(expand=c(0,0))
+```
+
+(@) Fit a simple regression model to predict total SAT score based on teacher pay.
+
+```{r}
+educ = educ %>% mutate(sat.both = sat.math + sat.verbal)
+mod = lm(sat.both~teacher.pay,data=educ)
+summary(mod)
+```
+
+(@) Does Y appear to be a linear function of X?
+
+We checked this in the plot above; it seems fairly reasonable to assume that Y is a linear function of X in this case, not because the line fits the data perfectly but because there isn't a stark curvilinear trend or other obvious issue. 
+
+(@) Check whether the variance of Y|X is the same for any X.
+
+To check for heteroskedasticity, we need to plot residuals against predicted values (i.e., y-hats):
+
+```{r}
+plot(mod$residuals~predict(mod))
+```
+
+Hmmm.. It looks like we might have a problem here, as the variance at low predicted values seems to be less than at high predicted values.
+
+(@) Check whether the errors (and thus the Y|X) are independent of one another).
+
+To check this assumption, we need to plot residuals against the regressor. It's probably a good idea to use standardized residuals. 
+```{r}
+plot(rstandard(mod)~educ$teacher.pay,ylim=c(-2.5,2.5))
+abline(h=0)
+```
+
+Things look pretty good here. The error terms appear to be relatively randomly distributed around 0. There might be an issue at lower values of teacher.pay, where all of the residuals are positive, however. 
+
+(@) Check whether the errors are normally distributed with mean zero.
+
+```{r}
+hist(mod$residuals)
+```
+
+The residuals here look pretty good. 
+
+(@) Identify any outliers and quantify their influence and leverage. 
+
+```{r}
+plot(rstandard(mod)~educ$teacher.pay,ylim=c(-2.5,2.5))
+abline(h=0)
+abline(h=2,lty=2)
+abline(h=-2,lty=2)
+```
+
+Based upon the standardized residuals, there aren't any problematic outliers too. Since there are 51 observations, we would expect at least 1 standardized residual to be above 2 or so.
+
+```{r}
+summary(round(cooks.distance(mod),2))
+```
+
+A quick look at the Cooks Distance values doesn't show any particularly high leverage values. This isn't surprising given the standardized residuals that we looked at. 
+
+(@) Explain the substantive conclusion that you would draw from the scatter plot and regression analysis. Be sure to interpret the coefficient in a complete sentence. 
+
+```{r}
+summary(mod)
+```
+
+Based upon the model results, our results predict that each additional $1k in teacher pay predicts a -4.8 point decrease in average combined SAT score. 
+
+
+### Problem 3
+
+You don't necessarily believe these results, and think there might be more to the story. Thus, you decide to carry on to a multiple regression analysis using more variables.
+
+(@) Using a figure or table, examine the pairwise correlations amongst potential model variables (go ahead and exclude the categorical indicators `state` and `region`. Comment on these results and how they will affect your model fitting. 
+
+```{r message = FALSE}
+library(knitr);library(dplyr)
+kable(round(cor(educ %>% select(-state,-region)),2))
+```
+
+(@) Identify the optimal model(s) using all possible subsets and AIC/BIC.
+
+If you remember your combinatorials, the number of combinations is $n! / [k!(n-k)!]$. There are 4 different independent variables to choose from, and bivariate regression is boring, so there are `r factorial(4) / (factorial(2) * factorial(4-2))` 2-variable models, `r factorial(4) / (factorial(3) * factorial(4-3))` 3-variable models, and obviously just 1 4-variable mode.
+
+```{r}
+educ.sub = educ %>% dplyr::select(-state,-region,-sat.math,-sat.verbal)
+mod.list = list(m1 = lm(sat.both ~ population + percent.taking,data=educ.sub),
+m2 = lm(sat.both ~ population + percent.no.hs,data=educ.sub),
+m3 = lm(sat.both ~ population + teacher.pay,data=educ.sub),
+m4 = lm(sat.both ~ percent.taking + percent.no.hs,data=educ.sub),
+m5 = lm(sat.both ~ percent.taking + teacher.pay,data=educ.sub),
+m6 = lm(sat.both ~ percent.no.hs + teacher.pay,data=educ.sub),
+m7 = lm(sat.both ~ population + percent.taking + percent.no.hs,data=educ.sub),
+m8 = lm(sat.both ~ population + percent.taking + teacher.pay,data=educ.sub),
+m9 = lm(sat.both ~ population + percent.no.hs + teacher.pay,data=educ.sub),
+m10 = lm(sat.both ~ percent.taking + percent.no.hs + teacher.pay,data=educ.sub),
+m11 = lm(sat.both ~ population + percent.taking + percent.no.hs + teacher.pay,data=educ.sub))
+
+mod.comps = data.frame(AIC = unlist(lapply(mod.list,AIC)),BIC = unlist(lapply(mod.list,BIC)),df = unlist(lapply(lapply(mod.list,coef),length))-1)
+mod.comps
+```
+
+Hmm. The lowest AIC score is for model 4, but many of the models seem to perform pretty similarly. Since Model 4 only uses 2 parameters AND has the lowest score, this would be the best choice here.
+
+(@) Identify the optimal model(s) using backward elimination and AIC/BIC.
+
+```{r}
+summary(lm.unrestricted <- lm(sat.both ~ ., data = educ.sub))
+#note: k =2 set's the criteria to AIC
+backAIC <- step(lm.unrestricted,direction = 'backward',k = 2)
+#note: k = log(n) set's the criteria to BIC
+backBIC <- step(lm.unrestricted,direction = 'backward',k = log(nrow(educ.sub)))
+```
+
+Okay, in this case the stepwise backward regression approach finds the same optimal model whether using AIC or BIC.
+
+
+(@) Identify the optimal model(s) using forward selection and AIC/BIC.
+
+```{r}
+summary(lm.unrestricted <- lm(sat.both ~ ., data = educ.sub))
+summary(lm.restricted <- lm(sat.both ~1,data = educ.sub))
+ step(lm.restricted, scope=list(lower=lm.restricted, upper=lm.unrestricted), direction="forward",k=2)
+
+  step(lm.restricted, scope=list(lower=lm.restricted, upper=lm.unrestricted), direction="forward",k=log(nrow(educ.sub)))
+```
+
+
+(@) Do the methods agree on the optimal model?  If not, why not?
+
+In this case, the methods do all agree on the optimal model: 
+
+$sat.both ~ percent.taking + percent.no.hs$
+
+(@) Assess whether your model is doing a good job of modeling the response (hint: think $Y$ vs. $\hat{Y}$  plot).
+
+```{r}
+mod.best = lm(sat.both ~ percent.taking + percent.no.hs,data=educ.sub)  
+plot(mod.best$fitted.values ~ educ.sub$sat.both,ylim=c(900,1200),xlim=c(900,1200))
+```
+
+This looks pretty good - there appears to be a linear relationship between observed Y's and predicted Y's, although if you look closely it might be the case the there is really a curvilinear relationship and Y is not a linear function of the X variables. 
+
+(@) Assess the relationship between each each predictor and the response (hint: marginal model plots). Is your model well-specified?
+
+```{r}
+library(car)
+mmp(mod.best, educ.sub$percent.taking)
+```
+
+This plot seems to indicate that perhaps the model isn't well specified with regards to the Percent Taking (the SAT) variable; The models fits this variable as a linear variable, but in looking at the smoothed trendline fit to the data, it appears that a curvilinear relationship exists. 
+
+```{r}
+mmp(mod.best, educ.sub$percent.no.hs)
+```
+
+The model looks pretty good in this case, as the two lines (one representing the model fit and one representing the nonparametric smoothed scatterplot trend).
+
+
+(@) Assess how much a given predictor $x_i$ can explain the response after the other predictors have been taken into account.
+
+```{r}
+avPlots(mod.best)
+```
+
+The added-variable plots indicate that each predictor make a significant contribution. We can observe that in each case there is a strong linear trend between the independent variable and the dependent variable even once the second independent variable has been factored in. 
+
+
+(@) Recommend a final model and provide your reasoning.
+
+It makes sense in this case to go the model that all three fiting strategies agreed on, since the diagnostic process failed to identify any fatal flaws. We only have four variables to work with, and it doesn't really make sense that state population would drive SAT scores, nor frankly would we necessarily expect that teacher salary has much to do with scores (what if, for instance, places with low-performing students teachers more to try to rectify this?). On the other hand, the percentage of students taking the test certainly matters (since in low-percentage states, it is the lower-performing students who do not take the test) and while the no-high school degree variable is a coarse metric for socio-economic status, it is better than nothing. 
+
+(@) Provide an interpretation (using sentences as you might in an academic journal) of your coefficient results.
+
+```{r}
+summary(mod.best)
+```
+
+The association between the percentage of students in each state who take the SAT and the average SAT score is negative and statistically significant at 0.001 significance. For a one percentage point increase in students taking the SAT, the average score is predicted to decrease by 2.34 points. The predicted association between the percentage of state residents without a high school degree and state average SAT score is also negative and statistically significant (at the 0.01 level); a one percentage point increase in this variable predicts a 2.54 point decrease in average score. 
+
+
+
+### Problem 4
+
+Examine Angell’s data on the moral integration of U.S. cities (Angells is a data file in the car library). 
+
+```{r message=FALSE,warnings=FALSE}
+library(car)
+data("Angell")
+```
+
+(@) Regress moral integration on heterogeneity and geographic mobility for the cities in dataset (multiple regression). 
+
+```{r}
+mod1 = lm(moral~hetero+mobility,data = Angell)
+```
+
+(@) Report the finding of the results. Be sure to use a table to report $\beta_0$, $\beta_1$, and $\beta_2$ and statistics that allow for significance tests to be performed on these three coefficients. Write a paragraph to substantively explain the results of the model. 
+
+```{r message =FALSE}
+library(texreg)
+screenreg(mod1)
+```
+
+The results of this model indicate that both heterogeneity and mobility are negatively related to moral integration in cities. Both independent variables are found to have statistically significant, negative assocations with moral integration. A one-unit increase in heterogeneity is predicted to reduce moral integration by 0.11 units. A one-unit increae in mobility is predicted to reduce moral integration by 0.19 units.
+
+```{r}
+avPlots(mod1)
+```
+
+```{r}
+plot(mod1$residuals~mod1$fitted.values)
+```
+
+
+### Report your process
+
+You're encouraged to reflect on what was hard/easy, problems you solved, helpful tutorials you read, etc. Give credit to your sources, whether it's a blog post, a fellow student, an online tutorial, etc.
+
+### Rubric
+
+Minus: Didn't tackle at least 3 tasks. Didn't interpret anything but left it all to the "reader". Or more than one technical problem that is relatively easy to fix. It's hard to find the report in our repo.
+
+Check: Completed, but not fully accurate and/or readable. Requires a bit of detective work on my part to see what you did
+
+Check plus: Hits all the elements. No obvious mistakes. Pleasant to read. No heroic detective work required. Solid.
+
+
+
+#### The command below is helpful for debugging, please don't change it
+
+```{r echo=FALSE}
+sessionInfo()
+```
+
+
+
+
+
+
+
+
+
